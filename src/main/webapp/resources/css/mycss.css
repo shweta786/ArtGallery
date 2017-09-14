@@ -1,0 +1,11 @@
+.line{
+    width: 350px;
+    height: 0px;
+    border-bottom: 1px solid black;
+    position: absolute;
+}
+
+input {    
+    border-bottom-color: white;
+}
+
