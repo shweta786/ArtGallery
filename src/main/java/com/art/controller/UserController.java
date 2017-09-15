@@ -137,6 +137,11 @@ public class UserController {
         model.addObject("names",names);
         return model;
     }
+    
+    @RequestMapping(value = "/save", method = RequestMethod.GET)
+    public ModelAndView getSave() {
+        return new ModelAndView("accessDenied");
+    }
 
     @RequestMapping(value = "/signin", method = RequestMethod.POST)
     public ModelAndView userIn(HttpServletRequest request) {
@@ -182,7 +187,12 @@ public class UserController {
         model.addObject("names",names);
         return model;
     }
-
+    
+    @RequestMapping(value = "/signin", method = RequestMethod.GET)
+    public ModelAndView userGetIn() {
+        return new ModelAndView("accessDenied");
+    }
+    
     @RequestMapping(value = "/artist", method = RequestMethod.GET)
     public ModelAndView getListReader() {
         ModelAndView model = new ModelAndView("showArtist");
@@ -254,7 +264,11 @@ public class UserController {
 
     @RequestMapping(value = "/artistPaint", method = RequestMethod.GET)
     public ModelAndView artistProfile(HttpServletRequest request, HttpSession session) {
+        
         ModelAndView model = new ModelAndView("artist");
+        if (session == null || session.getAttribute("email") == null) {
+            return new ModelAndView("redirect:/");
+        }
         Usr usr;
         List<Painting> paintings;
         if(request.getParameter("uid")!=null){
@@ -282,6 +296,11 @@ public class UserController {
         result.setMessage("Saved Successfully");
         result.setUsr(user);        
         return result;
+    }
+    
+    @RequestMapping(value = "/saveDes", method = RequestMethod.GET)
+    public ModelAndView saveGet() {
+        return new ModelAndView("accessDenied");
     }
 
     @RequestMapping(value = "/picUpload", method = RequestMethod.POST)
@@ -311,6 +330,11 @@ public class UserController {
         return result;
     }
 
+    @RequestMapping(value = "/picUpload", method = RequestMethod.GET)
+    public ModelAndView picGet() {
+        return new ModelAndView("accessDenied");
+    }
+    
     @RequestMapping(value = "/addPaint", method = RequestMethod.GET)
     public ModelAndView giveForm(HttpServletRequest request) {
         
@@ -387,6 +411,11 @@ public class UserController {
             
         }
         return new ModelAndView("redirect:/artistPaint");
+    }
+    
+    @RequestMapping(value = "/savePainting", method = RequestMethod.GET)
+    public ModelAndView paintGet() {
+        return new ModelAndView("accessDenied");
     }
     
     @RequestMapping(value = "/delPaint", method = RequestMethod.GET)
@@ -531,6 +560,11 @@ public class UserController {
         return result;
     }
     
+    @RequestMapping(value = "/forgotMail", method = RequestMethod.GET)
+    public ModelAndView forgetGet() {
+        return new ModelAndView("accessDenied");
+    }
+    
     
     @RequestMapping(value = "/setNewPass", method = RequestMethod.POST)
     public UserJsonDTO SetPassword(String email,String pass, HttpServletRequest request) {
@@ -544,6 +578,11 @@ public class UserController {
             result.setStatus("Password changed successfully");
         }
         return result;
+    }
+    
+    @RequestMapping(value = "/setNewPass", method = RequestMethod.GET)
+    public ModelAndView setNewGet() {
+        return new ModelAndView("accessDenied");
     }
 
 

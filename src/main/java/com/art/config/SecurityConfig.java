@@ -5,10 +5,18 @@
  */
 package com.art.config;
 
-/**
- *
- * @author SHWETA
- */
+//import org.springframework.context.annotation.ComponentScan;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+//
+///**
+// *
+// * @author SHWETA
+// */
+////@Configuration
+////@EnableWebSecurity
+////@ComponentScan(basePackages = "com.art")
 public class SecurityConfig {
     
 }
