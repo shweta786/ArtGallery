@@ -72,7 +72,7 @@
                         <br><br>
                         <button class="center col s12 btn waves-effect waves-light light-blue darken-1 z-depth-2" type="submit" name="action">Log In</button>
                         <br><br><br>
-                        <a class="center col s12 modal-trigger" href="#modal2"><u>New User? SignUp First</u></a>
+                        <a class="center col s12 modal-trigger" onclick="$('#modal1').modal('close');$('#modal2').modal('open');" href="#modal2"><u>New User? SignUp First</u></a>
                     </div>
                 </form>
             </div>

@@ -43,6 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -268,7 +269,7 @@ public class UserController {
         Usr usr;
         List<Painting> paintings;
         
-        if (request.getParameter("uid") != null && request.getParameter("uid") != "") {
+        if (request.getParameter("uid") != null && !request.getParameter("uid").equals("")) {
             usr = userService.getUserById(Integer.parseInt(request.getParameter("uid")));
             paintings = paintingService.getPaintingByUser(Integer.parseInt(request.getParameter("uid")));
             model.addObject("paintings", paintings);
@@ -345,7 +346,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/savePainting", method = RequestMethod.POST)
-    public ModelAndView saveP(@ModelAttribute Painting painting, @RequestParam("file") CommonsMultipartFile file, HttpSession session) {
+    public ModelAndView saveP(@ModelAttribute Painting painting, @RequestParam("file") CommonsMultipartFile file, HttpSession session, RedirectAttributes redir) {
         String path = "C:/Users/SHWETA/Desktop/upload/images";
         String fileName = UUID.randomUUID().toString();
         String filename = file.getOriginalFilename();
@@ -402,15 +403,11 @@ public class UserController {
             painting.setDt(dt);
             painting.setUser_id((int) session.getAttribute("user_id"));
             paintingService.addPainting(painting);
-
+            return new ModelAndView("redirect:/artistPaint");
         } catch (Exception ex) {
-
+            return new ModelAndView("newPaint");
         }
-//        ModelAndView.setViewName("redirect:welcome");
-//        redir.addFlashAttribute("USERNAME",uname);
-//        return modelAndView;
 
-        return new ModelAndView("redirect:/artistPaint");
     }
 
     @RequestMapping(value = "/savePainting", method = RequestMethod.GET)
