@@ -96,5 +96,18 @@ public class UserDaoImpl implements UserDao {
         session.getTransaction().commit();
         return getUserById(user_id);
     }
+
+    @Override
+    public void changePass(String email,String pass) {
+        Session session = getSess();                   //getting session for transaction
+        session.beginTransaction();
+        String hql = "update Usr usr set password=:pass where email=:email";
+        Query query = session.createQuery(hql);
+        query.setParameter("pass", pass);
+        query.setParameter("email", email);
+        query.executeUpdate();
+        session.getTransaction().commit();
+        session.flush();
+    }
     
 }

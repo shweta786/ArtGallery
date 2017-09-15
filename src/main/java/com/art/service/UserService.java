@@ -19,5 +19,6 @@ public interface UserService {
     public Usr getUserById(int user_id);
     public Usr editArtist(int user_id,String description, String contact);
     public Usr editPic(int user_id,String picToSave);
+    public void changePass(String email,String pass);
     
 }

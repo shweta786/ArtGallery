@@ -5,10 +5,12 @@
  */
 package com.art.config;
 
+import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
+
 /**
  *
  * @author SHWETA
  */
-public class SecurityInitializer {
+public class SecurityInitializer extends AbstractSecurityWebApplicationInitializer{
     
 }

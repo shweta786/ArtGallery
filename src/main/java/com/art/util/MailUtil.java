@@ -52,15 +52,16 @@ public class MailUtil {
             // Set text message part
             multipart.addBodyPart(messageBodyPart);
 
-            // Second part is attachment
-            for(String fn:fileNames){
-                DataSource source = new FileDataSource("C:/Users/SHWETA/Desktop/" + fn);
-                messageBodyPart = new MimeBodyPart();        
-                messageBodyPart.setDataHandler(new DataHandler(source));
-                messageBodyPart.setFileName(fn);
-                multipart.addBodyPart(messageBodyPart);               
+            if(fileNames != null) {
+                // Second part is attachment
+                for(String fn:fileNames){
+                    DataSource source = new FileDataSource("C:/Users/SHWETA/Desktop/" + fn);
+                    messageBodyPart = new MimeBodyPart();        
+                    messageBodyPart.setDataHandler(new DataHandler(source));
+                    messageBodyPart.setFileName(fn);
+                    multipart.addBodyPart(messageBodyPart);               
+                }
             }
-            
             // Send the complete message parts
             msg.setContent(multipart);
 

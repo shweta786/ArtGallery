@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 import java.util.UUID;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -73,30 +74,33 @@ public class UserController {
                 model = new ModelAndView("artistProfile");
             }
         }
-        List<Painting> painting = paintingService.getPainting();
-        List<String> names = new ArrayList<>();
-        for(Painting p:painting) {
-            names.add(userService.getUserById(p.getUser_id()).getName());
+        try{
+            List<Painting> painting = paintingService.getPainting();
+            List<String> names = new ArrayList<>();
+            for(Painting p:painting) {
+                names.add(userService.getUserById(p.getUser_id()).getName());
+            }
+            model.addObject("paintings", painting);
+            model.addObject("names",names);
+        } catch(Exception e) {  
         }
-        model.addObject("paintings", painting);
-        model.addObject("names",names);
         return model;
     }
 
-    @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public JsonDTO byajax(HttpServletRequest request) {
-       
-        List<Painting> paintings = paintingService.getPainting();
-        List<String> names = new ArrayList<>();
-        for(Painting p:paintings) {
-            names.add(userService.getUserById(p.getUser_id()).getName());
-        }
-        JsonDTO result = new JsonDTO();
-        result.setNames(names);
-        result.setPaintings(paintings);
-        result.setStatus("successfull");
-        return result;
-    }
+//    @RequestMapping(value = "/home", method = RequestMethod.GET)
+//    public JsonDTO byajax(HttpServletRequest request) {
+//       
+//        List<Painting> paintings = paintingService.getPainting();
+//        List<String> names = new ArrayList<>();
+//        for(Painting p:paintings) {
+//            names.add(userService.getUserById(p.getUser_id()).getName());
+//        }
+//        JsonDTO result = new JsonDTO();
+//        result.setNames(names);
+//        result.setPaintings(paintings);
+//        result.setStatus("successfull");
+//        return result;
+//    }
     
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public ModelAndView userLogout(HttpSession session) {
@@ -117,6 +121,7 @@ public class UserController {
             model = new ModelAndView("userProfile");
             usr.setType(0);
         }
+        
         userService.addUser(usr);
         HttpSession session = request.getSession();
         session.setAttribute("email", usr.getEmail());
@@ -468,7 +473,7 @@ public class UserController {
         
     }
     
-     @RequestMapping(value = "/selectPaint", method = RequestMethod.GET)
+    @RequestMapping(value = "/selectPaint", method = RequestMethod.GET)
     public JsonDTO paintByAjax(String type, HttpServletRequest request) {
        
         List<Painting> paintings = paintingService.getPaintingByType(type);
@@ -488,5 +493,58 @@ public class UserController {
         return result;
     }
     
+    @RequestMapping(value = "/forgotMail", method = RequestMethod.POST)
+    public UserJsonDTO forgotMailPassword(String mail, HttpServletRequest request) {
+       
+        UserJsonDTO result = new UserJsonDTO();
+        
+        if(mail == null) {
+            result.setMessage("Email id cannot be null");
+        } else {                
+            Usr user = userService.findUser(mail, "");
+            if(user == null){
+                result.setMessage("User does not exist");
+            } else {
+                int n = (int) (100000 + new Random().nextDouble() * 900000);
+                final String username = "galleryart1010";
+                final String password = "mindfire";
+                String host = "smtp.gmail.com";
+                Properties props = new Properties();
+                props.put("mail.smtp.auth", "true");
+                props.put("mail.smtp.starttls.enable", "true");
+                props.put("mail.smtp.host", host);
+                props.put("mail.smtp.port", "587");
+                props.put("mail.user", "galleryart1010@gmail.com");
+                props.put("mail.password", password);
+                // Get the Session object.
+                Session sess = Session.getInstance(props,
+                        new javax.mail.Authenticator() {
+                    public PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+                MailUtil.sendAttachmentEmail(sess, mail, "Forgot Password", "Here is your 6 digit confidential code for verification "+n+". Enter it and create a new password", null);
+                result.setMessage("code sent");
+                result.setStatus(Integer.toString(n));
+            }
+        }
+        return result;
+    }
+    
+    
+    @RequestMapping(value = "/setNewPass", method = RequestMethod.POST)
+    public UserJsonDTO SetPassword(String email,String pass, HttpServletRequest request) {
+       
+        UserJsonDTO result = new UserJsonDTO();
+        String ePass = BCrypt.hashpw(pass, BCrypt.gensalt());
+        if(pass == null || pass.equals("")){
+            result.setStatus("Error occured");
+        } else {
+            userService.changePass(email, ePass);
+            result.setStatus("Password changed successfully");
+        }
+        return result;
+    }
+
 
 }

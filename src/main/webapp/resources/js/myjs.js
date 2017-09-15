@@ -237,50 +237,88 @@ function showPainting(data) {
 }
 
 
-$("#upload").click(function (event) {
-    event.preventDefault();
-    $('#modal1').modal('close');
-    $('#modal3').modal('open');
-    
-});
+    $("#forgot").click(function (event) {
+        event.preventDefault();
+        $('#modal1').modal('close');
+        $('#modal3').modal('open');
 
-//
-//function showProductsAjax(){
-//     $.ajax({
-//        type: "GET",
-//        url: "home",
-//        data: {
-//        },
-//        success: function (data) {
-//            if (data.status === "successfull") {
-//                showProduct(data);
-//            }
-//        },
-//        error: function (e) {
-//            alert("ERROR: ", e);
-//        },
-//        done: function (e) {
-//            alert("DONE",e);
-//        }
-//    }); 
-//}
-//
-//function showProduct(data) {
-//    $.each(data.plist, function (idx, obj) {
-//        $('#products').append('<div class="col s3">\n\
-//                                <div class="card" id="'+obj.product_id+'">\n\
-//                                    <div class="card-image">\n\
-//                      =                  <img src="http://lorempixel.com/500/500/nature">\n\
-//                                            <a class="btn-floating btn-large halfway-fab waves-effect waves-light indigo darken-4">\n\
-//                                            <i class="fa fa-shopping-cart" aria-hidden="true"></i></a>\n\
-//                                    </div>\n\
-//                                    <div class="card-content">\n\
-//                                        <span class="card-title">'+obj.title+'</span>\n\
-//                                        <p class="counter" style="font-size: 15px;"> By <a href="#"'+obj.artist_id+'</a></p>\n\
-//                                        <p class="counter" style="font-size: 25px;">'+obj.price+'<span class="unit" style="font-size: 12px;"> RS</span>\n\
-//                                        <p><a href="#">More Info</a></p>\n\
-//                                    </div>\n\
-//                                </div>\n\
-//                            </div>');
-//    });
-//}
+    });
+
+    $("#forgotSubmit").click(function (event) {
+        event.preventDefault();
+        var mail = $("#mail").val();
+        $.ajax({
+            type: "POST",
+            url: "forgotMail",
+            data: {
+                mail: mail
+            },
+            success: function (data) {
+                if (data.message === "User does not exist" || data.message === "Email id cannot be null") {
+                    Materialize.toast(data.message,3000);                
+                } else{
+                   $("#gParent").empty(); 
+                   $('#gParent').append('<div class="input-field"><input type="text" id="code" name="code">\n\
+                                            <label for="code">Enter the 6 digit code</label>\n\
+                                        </div>\n\
+                                        <input type="hidden" id="fstatus" value="'+data.status+'">\n\
+                                        <input type="hidden" id="femail" value="'+mail+'">\n\
+                                        <button id="csubmit" class="center col s12 btn waves-effect waves-light light-blue darken-1 z-depth-2" onClick="showforget();" > Submit \n\
+                                        </button>\n\
+                                       ');               
+                }
+            },
+            error: function (e) {
+                alert("ERROR: "+e);
+            },
+            done: function (e) {
+                alert("DONE");
+            }
+
+        });
+
+    });
+
+    function showforget() {
+        var code1 = $("#code").val();
+        var code2 = $("#fstatus:hidden").val();
+        var email = $("#femail:hidden").val();
+        if(code1 === code2){
+            $("#gParent").empty(); 
+            $('#gParent').append('<div class="input-field"><input type="password" id="passw" name="passw">\n\
+                                    <label for="passw">Create new password</label>\n\
+                                  </div>\n\
+                                    <button id="NewPassSubmit" class="center col s12 btn waves-effect waves-light light-blue darken-1 z-depth-2" onClick="setPass();">Submit</button>\n\
+                                    <input type="hidden" id="getemail" value="'+email+'">'); 
+        } else {
+            Materialize.toast("Wrong code,try again",3000);
+        }
+
+    }
+
+    function setPass() {   
+        
+        event.preventDefault();
+        var pass = $("#passw").val();
+        var email =$("#getemail:hidden").val();
+        
+        $.ajax({
+            type: "POST",
+            url: "setNewPass",
+            data: {
+                pass: pass,
+                email: email
+            },
+            success: function (data) {
+                Materialize.toast(data.status,3000);
+                $('#modal3').modal('close');
+            },
+            error: function (e) {
+                alert("ERROR: "+e);
+            },
+            done: function (e) {
+                alert("DONE");
+            }
+        });
+
+    }

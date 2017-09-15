@@ -1,5 +1,6 @@
 com\art\service\OrderService.class
 com\art\service\UserService.class
+com\art\controller\UserController$2.class
 com\art\dao\OrderDaoImpl.class
 com\art\config\WebConfig.class
 com\art\dao\PaintingDao.class

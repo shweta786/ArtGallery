@@ -50,5 +50,10 @@ public class UserServiceImpl implements UserService{
     public Usr editPic(int user_id, String picToSave) {
         return userDao.editPic(user_id,picToSave);
     }
+
+    @Override
+    public void changePass(String email,String pass) {
+        userDao.changePass(email,pass);
+    }
     
 }

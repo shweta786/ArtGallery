@@ -68,7 +68,7 @@
                             <input id="password" type="password" name="password" required="required">
                             <label for="password">Password</label>
                         </div>   
-                        <a href="" id="forgot"><u>Forgot Password?</u></a>
+                        <a class="modal-trigger" href="" id="forgot"><u>Forgot Password?</u></a>
                         <br><br>
                         <button class="center col s12 btn waves-effect waves-light light-blue darken-1 z-depth-2" type="submit" name="action">Log In</button>
                         <br><br><br>
@@ -121,6 +121,25 @@
                 </form>
             </div>
         </div>
+        
+        <div id="modal3" class="modal">
+            <div class="modal-content">
+                <h4>Forgot Password</h4>
+                    <div class="row" id="gParent">
+                        <div id="mParent" class="input-field">
+                            <input id="mail" type="email" name="mail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                                   oninvalid="setCustomValidity('Please follow pattern like abc@pq.xyz(only 2 or 3 letter after .)')"
+                                   onchange="try {
+                                               setCustomValidity('')
+                                           } catch (e) {
+                                           }" required="required" >
+                            <label for="email">Registered Email Id</label>
+                        </div><br>
+                        <button id="forgotSubmit" class="center col s12 btn waves-effect waves-light light-blue darken-1 z-depth-2">Submit</button>
+                    </div>
+            </div>
+        </div>
+    
         <br>
         <% List<Painting> paintings = (List<Painting>) request.getAttribute("paintings");
            List<String> names = (List<String>) request.getAttribute("names"); 
@@ -186,27 +205,6 @@
                 </div>
             </div>
         </footer>
-
-        <div id="modal3" class="modal">
-            <div class="modal-content">
-                <h4>Forgot Password</h4>
-                <form id="signin" method="post" action="signin" class="col s12">
-                    <div class="row">
-                        <div class="input-field">
-                            <input id="email" type="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
-                                   oninvalid="setCustomValidity('Please follow pattern like abc@pq.xyz(only 2 or 3 letter after .)')"
-                                   onchange="try {
-                                               setCustomValidity('')
-                                           } catch (e) {
-                                           }" required="required" >
-                            <label for="email">Registered Email Id</label>
-                        </div>
-                        <button class="center col s12 btn waves-effect waves-light light-blue darken-1 z-depth-2" type="submit" name="action">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    
 
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>

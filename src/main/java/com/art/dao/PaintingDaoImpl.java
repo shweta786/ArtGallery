@@ -51,7 +51,6 @@ public class PaintingDaoImpl implements PaintingDao{
         session.getTransaction().commit();
         session.flush();
         session.close();
-        System.out.println("paintings------"+paintings+"   --  "+type);
         return paintings;
     }
     
