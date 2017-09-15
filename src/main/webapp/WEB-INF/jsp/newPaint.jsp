@@ -66,7 +66,7 @@
                                 <div class="input-field col s12">
                                     <input id="size" type="text" name="sze" pattern="?<=^| )\d+(\*\d+)?(?=$|" oninvalid="setCustomValidity('Enter valid dimensions like 150*120')"
                                    onchange="try {
-                                               setCustomValidity('')
+                                               setCustomValidity('');
                                            } catch (e) {
                                            }">
                                     <label for="size">size in pixels(width*height)</label>
@@ -91,7 +91,7 @@
                                 </div>
                             </div>
 
-                            <input type="file" style="display: none" id="uplp" name="file">
+                            <input type="file" style="display: none" id="uplp" name="file" required="required">
                             <center><button type="submit" id="savePaint" style="display: none">Save<i class="material-icons right">save</i></button></center>
                         </form>
                     </div>
@@ -107,7 +107,7 @@
             <div class="footer-copyright blue darken-1">
                 <div class="container">
                     © 2014 Copyright Text
-                    <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+                    <a class="grey-text text-lighten-4 right" href="">More Links</a>
                 </div>
             </div>
         </footer>

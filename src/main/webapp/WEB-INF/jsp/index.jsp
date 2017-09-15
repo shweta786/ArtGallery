@@ -151,6 +151,19 @@
         %> 
         
         
+        <div class="right">            
+            <a href="" class="dropdown-button" data-activates="dropdown2">Sort By    
+                <i class="material-icons" style=" padding-right: 40px;">arrow_drop_down</i>
+            </a>
+        </div>
+        <ul id="dropdown2" class="dropdown-content">
+            <li style="padding: 10px 0px 0px 30px;" class="orange-text">Price</li>
+            <li style="padding: 10px 0px 0px 30px;" class="orange-text">Time</li>
+            <li style="padding: 10px 0px 0px 20px;" class="orange-text">Popularity</li>
+            <li style="padding: 10px 0px 0px 30px;" class="orange-text">Size</li>
+        </ul>
+        <br>
+        
         
         <div class="center">
             <h5 id="headings">PAINTINGS</h5>
