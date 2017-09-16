@@ -103,5 +103,26 @@ public class PaintingDaoImpl implements PaintingDao{
         query.executeUpdate();
         session.getTransaction().commit();
     }
+
+    @Override
+    public void changePopularity(int painting_id) {
+        Session session = getSess();
+        session.beginTransaction();
+        String hql = "select popularity from Painting where painting_id= :id";
+        Query query = session.createQuery(hql);
+        query.setParameter("id",painting_id);
+        int p = (int) query.uniqueResult();
+        session.getTransaction().commit();
+        session.flush();
+        
+        hql = "update Painting set popularity=:pl where painting_id= :id";
+        query = session.createQuery(hql);
+        query.setParameter("pl", p+1);
+        query.setParameter("id",painting_id);
+        query.executeUpdate();
+        session.getTransaction().commit();
+        session.flush();
+        session.close();
+    }
     
 }

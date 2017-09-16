@@ -55,5 +55,10 @@ public class PaintingServiceImpl implements PaintingService{
     public List<Painting> getPaintingByType(String type) {
         return paintingDao.getPaintingByType(type);
     }
+
+    @Override
+    public void changePopularity(int painting_id) {
+        paintingDao.changePopularity(painting_id);
+    }
     
 }

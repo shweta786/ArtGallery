@@ -52,6 +52,7 @@
         </div>
         <div id="modal1" class="modal">
             <div class="modal-content">
+                <button class="modal-close right" style="background-color: Transparent; border: none;"><i class="material-icons right">close</i></button>
                 <h4>LogIn to Art Gallery</h4>
                 <form id="signin" method="post" action="signin" class="col s12">
                     <div class="row">
@@ -80,6 +81,7 @@
         
         <div id="modal2" class="modal">
             <div class="modal-content">
+                <button class="modal-close right" style="background-color: Transparent; border: none;"><i class="material-icons right">close</i></button>
                 <h4>Register to Art Gallery</h4>
                 <form id="signup" method="post" action="save" class="col s12">
                     <div class="row">
@@ -124,6 +126,7 @@
         
         <div id="modal3" class="modal">
             <div class="modal-content">
+                <button class="modal-close right" style="background-color: Transparent; border: none;"><i class="material-icons right">close</i></button>
                 <h4>Forgot Password</h4>
                     <div class="row" id="gParent">
                         <div id="mParent" class="input-field">
@@ -190,6 +193,7 @@
                                 <div class="card-content">
                                     <p class="left">Title-&nbsp;&nbsp;&nbsp;<%= paint.getName()%></p><br>
                                     <p class="left">Category-&nbsp;&nbsp;&nbsp;<%= paint.getType()%></p><br>
+                                    <p class="left">Size-&nbsp;&nbsp;&nbsp;<%= paint.getSze()%> px</p><br>
                                     <p class="left">By-&nbsp;&nbsp;&nbsp;<a href="artistPaint?uid=<%= paint.getUser_id()%>"><%= na.substring(0, 1).toUpperCase() + na.substring(1) %></a></p>
                                 </div>
                                 <div class="card-action" id="<%= paint.getPainting_id()%>">

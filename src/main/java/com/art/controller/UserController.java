@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -487,6 +488,7 @@ public class UserController {
             });
             for (Orders o : orders) {
                 Painting p = paintingService.getPaintingById(o.getPainting_id());
+                paintingService.changePopularity(o.getPainting_id());
                 filenames.add(p.getPainting_add());
             }
             MailUtil.sendAttachmentEmail(sess, to, "Your Order", "Find the attachement for your paintings that you have ordered. Come back soon.", filenames);
@@ -519,6 +521,35 @@ public class UserController {
         return result;
     }
 
+    @RequestMapping(value = "/sortPaint", method = RequestMethod.GET)
+    public JsonDTO sortPaintByAjax(String criteria, HttpServletRequest request) {
+
+        List<Painting> paintings = paintingService.getPainting();
+        if(criteria.equals("Price")){
+            Collections.sort(paintings,Painting.PaintingPrice);
+        }
+        if(criteria.equals("Popularity")){
+            Collections.sort(paintings,Painting.PaintingPopularity);
+        }
+        if(criteria.equals("Time")){
+            Collections.sort(paintings,Painting.paintingDate);
+        }
+        List<String> names = new ArrayList<>();
+        for (Painting p : paintings) {
+            names.add(userService.getUserById(p.getUser_id()).getName());
+        }
+        JsonDTO result = new JsonDTO();
+        if (names.isEmpty()) {
+            result.setMsg("Nothing to Show");
+        } else {
+            result.setMsg("got");
+        }
+        result.setNames(names);
+        result.setPaintings(paintings);
+        result.setStatus("successfull");
+        return result;
+    }
+    
     @RequestMapping(value = "/forgotMail", method = RequestMethod.POST)
     public UserJsonDTO forgotMailPassword(String mail, HttpServletRequest request) {
 

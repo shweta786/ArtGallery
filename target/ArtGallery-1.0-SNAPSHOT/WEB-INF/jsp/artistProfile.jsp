@@ -88,6 +88,7 @@
                                 <div class="card-content">
                                     <p class="left">Title-&nbsp;&nbsp;&nbsp;<%= paint.getName()%></p><br>
                                     <p class="left">Category-&nbsp;&nbsp;&nbsp;<%= paint.getType()%></p><br>
+                                    <p class="left">Size-&nbsp;&nbsp;&nbsp;<%= paint.getSze()%> px</p><br>
                                     <p class="left">By-&nbsp;&nbsp;&nbsp;<a href="artistPaint?uid=<%= paint.getUser_id()%>"><%= n.next()%></a></p>
                                 </div>
                                 <div class="card-action" id="<%= paint.getPainting_id()%>">                                    

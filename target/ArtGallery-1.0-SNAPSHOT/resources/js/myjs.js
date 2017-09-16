@@ -225,6 +225,61 @@ function showPainting(data) {
                                             <div class="card-content">\n\
                                                 <p class="left">Title-&nbsp;&nbsp;&nbsp;' + obj.name + '</p><br>\n\
                                                 <p class="left">Category-&nbsp;&nbsp;&nbsp;' + obj.type + '</p><br>\n\
+                                                <p class="left">Size-&nbsp;&nbsp;&nbsp;'+ obj.sze +' px</p><br>\n\
+                                                <p class="left">By-&nbsp;&nbsp;&nbsp;<a href="artistPaint?uid=' + obj.user_id + '">' + data.names[idx] + '</a></p>\n\
+                                            </div>\n\
+                                            <div class="card-action" id="' + obj.painting_id + '">\n\
+                                                <a href="" class="crt"><i class="material-icons">add_shopping_cart</i>Add To Cart</a>\n\
+                                            </div>\n\
+                                        </div>\n\
+                                     </div>');
+        });
+    }
+}
+
+
+
+$('#dropdown2 li').on('click', function() {
+    var liValue = $(this).html();
+     $.ajax({
+        type: "GET",
+        url: "sortPaint",
+        data: {
+            criteria: liValue
+        },
+        success: function (data) {
+            if (data.status === "successfull") {
+                $("#cart_parent").empty();
+                $("#headings").text("Paintings by "+ liValue);
+                showSortPainting(data);
+            }
+        },
+        error: function (e) {
+            alert("ERROR: "+e);
+        },
+        done: function (e) {
+            alert("DONE");
+        }
+    });
+    
+});
+
+function showSortPainting(data) {
+    
+    if(data.msg !== "got") {
+        $('#cart_parent').append('<center class="blue-text">'+data.msg+'</center>');
+    } else {
+        $.each(data.paintings, function (idx, obj) {
+            $('#cart_parent').append('<div class="col s4">\n\
+                                        <div class="card">\n\
+                                            <div class="card-image">\n\
+                                                <img src="' + obj.thumbnail_add + '" style="height: 200px">\n\
+                                                <span class="card-title">Rs/- ' + obj.price + '</span>\n\
+                                            </div>\n\
+                                            <div class="card-content">\n\
+                                                <p class="left">Title-&nbsp;&nbsp;&nbsp;' + obj.name + '</p><br>\n\
+                                                <p class="left">Category-&nbsp;&nbsp;&nbsp;' + obj.type + '</p><br>\n\
+                                                <p class="left">Size-&nbsp;&nbsp;&nbsp;'+ obj.sze +' px</p><br>\n\
                                                 <p class="left">By-&nbsp;&nbsp;&nbsp;<a href="artistPaint?uid=' + obj.user_id + '">' + data.names[idx] + '</a></p>\n\
                                             </div>\n\
                                             <div class="card-action" id="' + obj.painting_id + '">\n\

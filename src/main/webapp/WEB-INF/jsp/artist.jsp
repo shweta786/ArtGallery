@@ -124,6 +124,7 @@
                                 <div class="card-content">
                                     <p class="left">Title-&nbsp;&nbsp;&nbsp;<%= paint.getName()%></p><br>
                                     <p class="left">Category-&nbsp;&nbsp;&nbsp;<%= paint.getType()%></p><br>
+                                    <p class="left">Size-&nbsp;&nbsp;&nbsp;<%= paint.getSze()%> px</p><br>
                                 </div>
                                 
                                 <div class="card-action" id="<%= paint.getPainting_id()%>">

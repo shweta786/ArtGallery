@@ -1,4 +1,5 @@
 com\art\service\OrderService.class
+com\art\model\Painting$2.class
 com\art\service\UserService.class
 com\art\controller\UserController$2.class
 com\art\dao\OrderDaoImpl.class
@@ -12,9 +13,11 @@ com\art\dto\JsonDTO.class
 com\art\model\Usr.class
 com\art\service\PaintingService.class
 com\art\model\Painting.class
+com\art\model\Painting$1.class
 com\art\dto\UserJsonDTO.class
 com\art\service\OrderServiceImpl.class
 com\art\dao\UserDaoImpl.class
+com\art\model\Painting$3.class
 com\art\config\WebInitializer.class
 com\art\dao\PaintingDaoImpl.class
 com\art\config\SecurityInitializer.class

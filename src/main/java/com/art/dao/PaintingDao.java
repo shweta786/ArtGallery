@@ -21,4 +21,5 @@ public interface PaintingDao {
     public Painting getPaintingById(int painting_id);
     public void addPainting(Painting painting);
     public void deletePainting(int Painting_id);
+    public void changePopularity(int painting_id);
 }

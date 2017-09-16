@@ -6,10 +6,16 @@
 package com.art.model;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -121,5 +127,47 @@ public class Painting implements Serializable{
         this.status = status;
     }
     
+    public static Comparator<Painting> PaintingPrice = new Comparator<Painting>() {
+
+        @Override
+	public int compare(Painting s1, Painting s2) {
+
+	   int price1 = Integer.parseInt(s1.getPrice());
+	   int price2 = Integer.parseInt(s2.getPrice());
+
+	   /*For ascending order*/
+	   return price1-price2;
+
+	   /*For descending order*/
+	   //rollno2-rollno1;
+   }};
+    
+    public static Comparator<Painting> PaintingPopularity = new Comparator<Painting>() {
+
+        @Override
+	public int compare(Painting s1, Painting s2) {
+
+	   int popular1 = s1.getPopularity();
+	   int popular2 = s2.getPopularity();
+
+	   /*For ascending order*/
+	   return popular2-popular1;
+
+	   /*For descending order*/
+	   //rollno2-rollno1;
+   }};
+    
+    public static Comparator<Painting> paintingDate = new Comparator<Painting>() {
+        DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        @Override
+	public int compare(Painting s1, Painting s2) {
+	   String date1 = s1.getDt();
+	   String date2 = s2.getDt();
+             try {
+                 return f.parse(date1).compareTo(f.parse(date2));
+             } catch (ParseException ex) {
+                throw new IllegalArgumentException(ex);
+             }
+    }};
     
 }
