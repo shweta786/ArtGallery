@@ -35,7 +35,6 @@ public class PaintingDaoImpl implements PaintingDao{
         List<Painting> paintings = query.list();
         session.getTransaction().commit();
         session.flush();
-        session.close();
         return paintings;
     }
 
@@ -50,7 +49,6 @@ public class PaintingDaoImpl implements PaintingDao{
         List<Painting> paintings = query.list();
         session.getTransaction().commit();
         session.flush();
-        session.close();
         return paintings;
     }
     
@@ -65,7 +63,6 @@ public class PaintingDaoImpl implements PaintingDao{
         List<Painting> paintings = query.list();
         session.getTransaction().commit();
         session.flush();
-        session.close();
         return paintings;
     }
 
@@ -82,7 +79,6 @@ public class PaintingDaoImpl implements PaintingDao{
         query.setParameter("id", painting_id);
         query.setParameter("st", 0);
         session.flush();
-        session.close();
         return (Painting)query.uniqueResult();
     }
 
@@ -93,7 +89,6 @@ public class PaintingDaoImpl implements PaintingDao{
         session.save(painting);         
         session.getTransaction().commit();    
         session.flush();
-        session.close();
     }
 
     @Override
@@ -107,7 +102,6 @@ public class PaintingDaoImpl implements PaintingDao{
         query.executeUpdate();
         session.getTransaction().commit();
         session.flush();
-        session.close();
     }
 
     @Override
@@ -128,7 +122,6 @@ public class PaintingDaoImpl implements PaintingDao{
         query.executeUpdate();
         session.getTransaction().commit();
         session.flush();
-        session.close();
     }
     
 }
