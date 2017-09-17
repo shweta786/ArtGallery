@@ -161,6 +161,29 @@ $("#cart_parent").on("click", "a.deleteViewRow", function () {
     });
 });
 
+//$("#download").click(function (event) {
+//    debugger;
+//    event.preventDefault();
+//    var pid = $(this).parent().attr("id");
+//    $.ajax({
+//        type: "GET",
+//        url: "downloadPainting",
+//        data: {
+//            painting_id : pid
+//        },
+//        success: function (data) {
+//            Materialize.toast(data.message, 3000);
+//        },
+//        error: function (e) {
+//            Materialize.toast("Error", 3000);
+//        },
+//        done: function (e) {
+//            alert(e);
+//        }
+//
+//    });
+//});
+
 
 $("#cart_parent").on("click", "a.crt", function (event) {
     

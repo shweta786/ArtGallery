@@ -89,6 +89,7 @@
                                 </div>
                                 <div class="card-stacked">
                                     <div class="card-content">
+                                        <a href="downloadPainting?pid=<%= pn.getPainting_id()%>" id="download" title="Download Painting"><i class="material-icons right">file_download</i></a>
                                         <%Orders or = o.next();%>
                                         <p>Order Id: <%= or.getOrder_id()%></p><br>
                                         <p>Date of Order: <%= or.getOrder_date()%></p><br>

@@ -16,9 +16,11 @@ import com.art.service.UserService;
 import com.art.util.MailUtil;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,7 +32,9 @@ import java.util.Random;
 import java.util.UUID;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.name.Rename;
@@ -61,6 +65,9 @@ public class UserController {
 
     @Autowired
     OrderService orderService;
+
+    @Autowired
+    ServletContext context;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView getAllPainting(HttpServletRequest request) {
@@ -269,7 +276,7 @@ public class UserController {
         ModelAndView model = new ModelAndView("artist");
         Usr usr;
         List<Painting> paintings;
-        
+
         if (request.getParameter("uid") != null && !request.getParameter("uid").equals("")) {
             usr = userService.getUserById(Integer.parseInt(request.getParameter("uid")));
             paintings = paintingService.getPaintingByUser(Integer.parseInt(request.getParameter("uid")));
@@ -278,7 +285,7 @@ public class UserController {
         } else {
             return new ModelAndView("redirect:/");
         }
-        
+
         if (usr == null || usr.getType() == 0) {
             return new ModelAndView("redirect:/");
         }
@@ -525,14 +532,14 @@ public class UserController {
     public JsonDTO sortPaintByAjax(String criteria, HttpServletRequest request) {
 
         List<Painting> paintings = paintingService.getPainting();
-        if(criteria.equals("Price")){
-            Collections.sort(paintings,Painting.PaintingPrice);
+        if (criteria.equals("Price")) {
+            Collections.sort(paintings, Painting.PaintingPrice);
         }
-        if(criteria.equals("Popularity")){
-            Collections.sort(paintings,Painting.PaintingPopularity);
+        if (criteria.equals("Popularity")) {
+            Collections.sort(paintings, Painting.PaintingPopularity);
         }
-        if(criteria.equals("Time")){
-            Collections.sort(paintings,Painting.paintingDate);
+        if (criteria.equals("Time")) {
+            Collections.sort(paintings, Painting.paintingDate);
         }
         List<String> names = new ArrayList<>();
         for (Painting p : paintings) {
@@ -549,7 +556,45 @@ public class UserController {
         result.setStatus("successfull");
         return result;
     }
-    
+
+    @RequestMapping(value = "/downloadPainting", method = RequestMethod.GET)
+    public ModelAndView downloadP(HttpServletRequest request, HttpServletResponse response) {
+
+        if (request.getParameter("pid") != null && !request.getParameter("pid").equals("")) {
+            
+            Painting p = paintingService.getPaintingById(Integer.parseInt(request.getParameter("pid")));
+            try {
+                String filePath = "C:/Users/SHWETA/Desktop/" + p.getPainting_add();
+                File file = new File(filePath);
+                FileInputStream fin = new FileInputStream(file);
+                String mimeType = context.getMimeType(filePath);
+                if (mimeType == null) {
+                    mimeType = "application/octet-stream";
+                }
+                response.setContentType(mimeType);
+                response.setContentLength((int) file.length());
+
+                //forces download
+                String headerKey = "Content-Disposition";
+                String headerValue = String.format("attachment; filename=\"%s\"", file.getName());
+                response.setHeader(headerKey, headerValue);
+
+                OutputStream outStream = response.getOutputStream();
+                byte[] buffer = new byte[4096];
+                int byteRead = -1;
+                while ((byteRead = fin.read(buffer)) != -1) {
+                    outStream.write(buffer, 0, byteRead);
+                }
+                fin.close();
+                outStream.close();
+            } catch (Exception ex) {
+                System.out.println("Exception " + ex);
+            }
+            
+        }
+        return new ModelAndView("redirect:/myOrder");
+    }
+
     @RequestMapping(value = "/forgotMail", method = RequestMethod.POST)
     public UserJsonDTO forgotMailPassword(String mail, HttpServletRequest request) {
 
