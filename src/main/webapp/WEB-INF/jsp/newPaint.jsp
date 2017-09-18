@@ -46,8 +46,8 @@
 
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <input id="first_name" type="text" name="name" required>
-                                    <label for="name">Title/Name *</label>
+                                    <input id="first_name" type="text" maxlength="100" name="name" required>
+                                    <label for="name">Title/Name(max 100 characters) *</label>
                                 </div>
                             </div>
 

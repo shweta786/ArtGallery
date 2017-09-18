@@ -14,8 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Comparator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -138,8 +136,6 @@ public class Painting implements Serializable{
 	   /*For ascending order*/
 	   return price1-price2;
 
-	   /*For descending order*/
-	   //rollno2-rollno1;
    }};
     
     public static Comparator<Painting> PaintingPopularity = new Comparator<Painting>() {
@@ -153,8 +149,6 @@ public class Painting implements Serializable{
 	   /*For ascending order*/
 	   return popular2-popular1;
 
-	   /*For descending order*/
-	   //rollno2-rollno1;
    }};
     
     public static Comparator<Painting> paintingDate = new Comparator<Painting>() {

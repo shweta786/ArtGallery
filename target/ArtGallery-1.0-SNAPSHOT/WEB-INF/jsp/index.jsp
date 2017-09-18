@@ -57,7 +57,7 @@
                 <form id="signin" method="post" action="signin" class="col s12">
                     <div class="row">
                         <div class="input-field">
-                            <input id="email" type="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                            <input id="email" maxlength="490" type="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                                    oninvalid="setCustomValidity('Please follow pattern like abc@pq.xyz(only 2 or 3 letter after .)')"
                                    onchange="try {
                                                setCustomValidity('')
@@ -66,7 +66,7 @@
                             <label for="email">Registered Email</label>
                         </div>
                         <div class="input-field">
-                            <input id="password" type="password" name="password" required="required">
+                            <input id="password" maxlength="190" type="password" name="password" required="required">
                             <label for="password">Password</label>
                         </div>   
                         <a class="modal-trigger" href="" id="forgot"><u>Forgot Password?</u></a>
@@ -86,11 +86,11 @@
                 <form id="signup" method="post" action="save" class="col s12">
                     <div class="row">
                         <div class="input-field">
-                            <input id="name" name="name" type="text" required="required">
-                            <label for="name">Full Name</label>
+                            <input id="name" name="name" type="text" maxlength="190" required="required">
+                            <label for="name">Full Name(max. 200 characters)</label>
                         </div>
                         <div class="input-field">
-                            <input id="email" name="email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required="required"
+                            <input id="email" maxlength="490" name="email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required="required"
                                    oninvalid="setCustomValidity('Please match format like abc@pq.xyz(only 2 or 3 letter after .)')"
                                    onchange="try {
                                                setCustomValidity('')
@@ -107,7 +107,7 @@
                             <label for="contact">Phone (optional)</label>
                         </div>
                         <div class="input-field">
-                            <input id="password" name="password" type="password" >
+                            <input id="password" maxlength="490" name="password" type="password" >
                             <label for="password">Password</label>
                         </div><br>
                         <div>
@@ -130,7 +130,7 @@
                 <h4>Forgot Password</h4>
                     <div class="row" id="gParent">
                         <div id="mParent" class="input-field">
-                            <input id="mail" type="email" name="mail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                            <input id="mail" type="email" maxlength="490" name="mail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                                    oninvalid="setCustomValidity('Please follow pattern like abc@pq.xyz(only 2 or 3 letter after .)')"
                                    onchange="try {
                                                setCustomValidity('')

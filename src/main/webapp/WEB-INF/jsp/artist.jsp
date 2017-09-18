@@ -67,9 +67,13 @@
                     <div class="card-stacked">
                         <div class="card-content">                           
                             <p><h5>About me:</h5><p id="inv"><font color="#9e9e9e"><%= usr.getDescription()%></font></p>
-                            <textarea class="materialize-textarea" id="des" name="des" style="display:none;"><%= usr.getDescription()%></textarea><br><br>
+                            <textarea class="materialize-textarea" maxlength="999" id="des" name="des" style="display:none;"><%= usr.getDescription()%></textarea><br><br>
                             <p><h5>Email-id:<input type="text" value="<%= usr.getEmail()%>" id="email" name="email" style="border-bottom-color: white" readonly disabled>                                                              
-                            <p><h5>Contact Number:<input type="text" value="<%= usr.getContact()%>" id="contact" name="contact" style="border-bottom-color: white" disabled>
+                            <p><h5>Contact Number:<input type="text" value="<%= usr.getContact()%>" id="contact" name="contact" style="border-bottom-color: white" pattern="[0-9]{10}" oninvalid="setCustomValidity('Enter valid mobile number of 10 digits')"
+                                   onchange="try {
+                                               setCustomValidity('')
+                                           } catch (e) {
+                                           }" disabled>
                         </div>
                     </div>
                     <a style="display: none" id="safe" class="btn-floating halfway-fab z-depth-3" title="Save Details"><i class="material-icons">save</i></a>     

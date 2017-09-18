@@ -161,29 +161,6 @@ $("#cart_parent").on("click", "a.deleteViewRow", function () {
     });
 });
 
-//$("#download").click(function (event) {
-//    debugger;
-//    event.preventDefault();
-//    var pid = $(this).parent().attr("id");
-//    $.ajax({
-//        type: "GET",
-//        url: "downloadPainting",
-//        data: {
-//            painting_id : pid
-//        },
-//        success: function (data) {
-//            Materialize.toast(data.message, 3000);
-//        },
-//        error: function (e) {
-//            Materialize.toast("Error", 3000);
-//        },
-//        done: function (e) {
-//            alert(e);
-//        }
-//
-//    });
-//});
-
 
 $("#cart_parent").on("click", "a.crt", function (event) {
     
@@ -336,7 +313,7 @@ function showSortPainting(data) {
                     Materialize.toast(data.message,3000);                
                 } else{
                    $("#gParent").empty(); 
-                   $('#gParent').append('<div class="input-field"><input type="text" id="code" name="code">\n\
+                   $('#gParent').append('<div class="input-field"><input type="text" maxlength="6" id="code" name="code">\n\
                                             <label for="code">Enter the 6 digit code</label>\n\
                                         </div>\n\
                                         <input type="hidden" id="fstatus" value="'+data.status+'">\n\
@@ -363,7 +340,7 @@ function showSortPainting(data) {
         var email = $("#femail:hidden").val();
         if(code1 === code2){
             $("#gParent").empty(); 
-            $('#gParent').append('<div class="input-field"><input type="password" id="passw" name="passw">\n\
+            $('#gParent').append('<div class="input-field"><input type="password" maxlength="490" id="passw" name="passw">\n\
                                     <label for="passw">Create new password</label>\n\
                                   </div>\n\
                                     <button id="NewPassSubmit" class="center col s12 btn waves-effect waves-light light-blue darken-1 z-depth-2" onClick="setPass();">Submit</button>\n\

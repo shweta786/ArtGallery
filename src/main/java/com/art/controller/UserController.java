@@ -50,10 +50,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/**
- *
- * @author SHWETA
- */
 @RestController
 public class UserController {
 
@@ -96,20 +92,6 @@ public class UserController {
         return model;
     }
 
-//    @RequestMapping(value = "/home", method = RequestMethod.GET)
-//    public JsonDTO byajax(HttpServletRequest request) {
-//       
-//        List<Painting> paintings = paintingService.getPainting();
-//        List<String> names = new ArrayList<>();
-//        for(Painting p:paintings) {
-//            names.add(userService.getUserById(p.getUser_id()).getName());
-//        }
-//        JsonDTO result = new JsonDTO();
-//        result.setNames(names);
-//        result.setPaintings(paintings);
-//        result.setStatus("successfull");
-//        return result;
-//    }
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public ModelAndView userLogout(HttpSession session) {
         session.invalidate();
