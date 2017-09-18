@@ -336,7 +336,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/savePainting", method = RequestMethod.POST)
-    public ModelAndView saveP(@ModelAttribute Painting painting, @RequestParam("file") CommonsMultipartFile file, HttpSession session, RedirectAttributes redir) {
+    public ModelAndView saveP(@ModelAttribute Painting painting, @RequestParam("file") CommonsMultipartFile file, HttpSession session) {
         String path = "C:/Users/SHWETA/Desktop/upload/images";
         String fileName = UUID.randomUUID().toString();
         String filename = file.getOriginalFilename();

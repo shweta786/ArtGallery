@@ -41,7 +41,7 @@
             List<Painting> paintings = (List<Painting>) request.getAttribute("paintings");
             List<String> names = (List<String>) request.getAttribute("names");
 
-            if (orders != null && paintings != null) {
+            if (orders != null && paintings != null && names != null) {
                 Iterator<Orders> o = orders.iterator();
                 Iterator<Painting> p = paintings.iterator();
                 Iterator<String> n = names.iterator();

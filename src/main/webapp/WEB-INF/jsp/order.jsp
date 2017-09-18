@@ -42,7 +42,7 @@
             List<Orders> orders = (List<Orders>) request.getAttribute("orders");
             List<Painting> paintings = (List<Painting>) request.getAttribute("paintings");
             List<String> names = (List<String>) request.getAttribute("names");
-            if (orders == null || paintings == null) {
+            if (orders == null || paintings == null || names == null) {
             } else {
                 Iterator<Orders> o = orders.iterator();
                 Iterator<Painting> p = paintings.iterator();
