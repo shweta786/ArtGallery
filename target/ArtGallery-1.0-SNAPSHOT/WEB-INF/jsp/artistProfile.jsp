@@ -31,7 +31,7 @@
                 <li style="padding: 10px 0px 0px 70px;" class="orange-text">animation</li>
                 <li style="padding: 10px 0px 0px 70px;" class="orange-text">other</li>
             </ul>
-              <ul id="dropdown2" class="dropdown-content">
+              <ul id="dropdown3" class="dropdown-content">
                 <li><a href="myOrder">My Orders</a></li>
                 <li><a href="artistPaint?uid=<%= session.getAttribute("user_id")%>">My Profile</a></li>
             </ul>
@@ -45,7 +45,7 @@
                         <li><a class="dropdown-button" data-activates="dropdown1">Select By Category
                                 <i class="material-icons right">arrow_drop_down</i></a></li>
                         <li><a href="myCart"><i class="fa fa-shopping-cart right" aria-hidden="true"></i>My Cart</a></li>
-                        <li><a class="dropdown-button" data-activates="dropdown2">My Account
+                        <li><a class="dropdown-button" data-activates="dropdown3">My Account
                                 <i class="material-icons right">account_box</i></a></li>
                         <li><a class="waves-effect waves-light btn" href="logout">LogOut</a></li>
                     </ul>
@@ -63,6 +63,7 @@
         <br>
         <% List<Painting> paintings = (List<Painting>) request.getAttribute("paintings");
            List<String> names = (List<String>) request.getAttribute("names");
+           if (names != null && paintings != null) {
            Iterator<String> n = names.iterator();
           int c = 0;
         %> 
@@ -111,6 +112,7 @@
                             </div>
                         </div>
                         <%
+                                }
                             }
                         }
                         %>

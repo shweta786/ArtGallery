@@ -106,7 +106,8 @@
                 <div class="card">
 
                     <div class="row" style="padding: 20px" id="cart_parent">
-                        <% for (Painting paint : paintings) {
+                        <% if (paintings != null) {
+                            for (Painting paint : paintings) {
                                 c++;
                                 if (c % 4 == 0) {
                             } else {
@@ -139,6 +140,7 @@
                         <%
                                 }
                             }
+                        }
                         %>
                     </div>
                 </div>

@@ -57,8 +57,9 @@
         <br>
         <% List<Painting> paintings = (List<Painting>) request.getAttribute("paintings");
             List<String> names = (List<String>) request.getAttribute("names");
-           Iterator<String> n = names.iterator();
-            int c = 0;
+            if (names != null && paintings != null) {
+                Iterator<String> n = names.iterator();
+                int c = 0;
         %> 
         
         <div class="right">            
@@ -106,6 +107,7 @@
                             </div>
                         </div>
                         <%
+                                }
                             }
                         }
                         %>
