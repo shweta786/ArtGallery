@@ -384,7 +384,7 @@ public class UserController {
 
             String picToSave = "upload/images/" + fileName + filename;
             String PicThumbnail = "upload/thumbnail/thumbnail." + fileName + filename;
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = new Date();
             String dt = dateFormat.format(date);
 

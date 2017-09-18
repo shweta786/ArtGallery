@@ -202,7 +202,6 @@ $('#dropdown1 li').on('click', function() {
             }
         },
         error: function (e) {
-            alert("ERROR: "+e);
         },
         done: function (e) {
             alert("DONE");
@@ -255,7 +254,6 @@ $('#dropdown2 li').on('click', function() {
             }
         },
         error: function (e) {
-            alert("ERROR: "+e);
         },
         done: function (e) {
             alert("DONE");
