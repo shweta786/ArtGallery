@@ -60,7 +60,7 @@
                             <input id="email" maxlength="490" type="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                                    oninvalid="setCustomValidity('Please follow pattern like abc@pq.xyz(only 2 or 3 letter after .)')"
                                    onchange="try {
-                                               setCustomValidity('')
+                                               setCustomValidity('');
                                            } catch (e) {
                                            }" required="required" >
                             <label for="email">Registered Email</label>

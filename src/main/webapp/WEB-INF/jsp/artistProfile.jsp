@@ -68,11 +68,6 @@
           int c = 0;
         %> 
         
-        <div class="right">            
-            <a href="" class="dropdown-button" data-activates="dropdown2">Sort By    
-                <i class="material-icons" style=" padding-right: 40px;">arrow_drop_down</i>
-            </a>
-        </div>
         <ul id="dropdown2" class="dropdown-content">
             <li style="padding: 10px 0px 0px 30px;" class="orange-text">Price</li>
             <li style="padding: 10px 0px 0px 30px;" class="orange-text">Time</li>
@@ -81,8 +76,15 @@
         </ul>
         <br>
 
-        <div class="center">
-            <h4>PAINTINGS</h4>
+        <div class="row container">
+            <div class="col s6">
+                <h5 id="headings" class="right">PAINTINGS</h5>
+            </div>
+            <div class="col s6" style="padding-top: 8px">
+                <a href="" class="dropdown-button" data-activates="dropdown2" style="font-size: 20px">Sort By    
+                <i class="material-icons" style=" padding-right: 40px;">arrow_drop_down</i>
+            </a>
+            </div>
         </div>
         <div class="container row " >
             <div class="col s12 ">
