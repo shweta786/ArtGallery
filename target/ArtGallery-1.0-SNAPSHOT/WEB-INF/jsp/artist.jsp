@@ -45,6 +45,7 @@
         <%
             List<Painting> paintings = (List<Painting>) request.getAttribute("paintings");
             Usr usr = (Usr) request.getAttribute("usr");
+            if (paintings != null && usr != null) {
             int c = 0;
         %>
 
@@ -106,7 +107,7 @@
                 <div class="card">
 
                     <div class="row" style="padding: 20px" id="cart_parent">
-                        <% if (paintings != null) {
+                        <% 
                             for (Painting paint : paintings) {
                                 c++;
                                 if (c % 4 == 0) {
