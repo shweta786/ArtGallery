@@ -37,6 +37,7 @@ public class OrderDaoImpl implements OrderDao{
         query.setParameter("type", typ);
         List<Orders> orders = query.list();
         session.getTransaction().commit();
+        session.close();
         return orders;
     }
 
@@ -49,6 +50,7 @@ public class OrderDaoImpl implements OrderDao{
         query.setParameter("id",painting_id);
         List<Orders> orders = query.list();
         session.getTransaction().commit();
+        session.close();
         return orders;
     }
 
@@ -61,6 +63,7 @@ public class OrderDaoImpl implements OrderDao{
         query.setParameter("id",order_id);
         Orders order = (Orders)query.uniqueResult();
         session.getTransaction().commit();
+        session.close();
         return order;
     }
 
@@ -83,6 +86,7 @@ public class OrderDaoImpl implements OrderDao{
         query.setParameter("id",order_id);
         query.executeUpdate();
         session.getTransaction().commit();
+        session.close();
     }
 
     @Override
@@ -103,6 +107,7 @@ public class OrderDaoImpl implements OrderDao{
             query.setParameter("id", o.getOrder_id());
             query.executeUpdate();
             session.getTransaction().commit();
+            session.close();
             
             session = getSess();
             session.beginTransaction();
@@ -111,6 +116,7 @@ public class OrderDaoImpl implements OrderDao{
             query.setParameter("id",o.getPainting_id());
             int popular = (int) query.uniqueResult();
             session.getTransaction().commit();
+            session.close();
             
             session = getSess();
             session.beginTransaction();
@@ -120,6 +126,7 @@ public class OrderDaoImpl implements OrderDao{
             query.setParameter("id",o.getPainting_id());
             query.executeUpdate();
             session.getTransaction().commit();
+            session.close();
         }        
         
     }

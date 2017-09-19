@@ -33,6 +33,7 @@ public class UserDaoImpl implements UserDao {
         query.setParameter("type", 1);
         List<Usr> usr = query.list();
         session.getTransaction().commit();
+        session.close();
         return usr;
     }
 
@@ -55,6 +56,7 @@ public class UserDaoImpl implements UserDao {
         query.setParameter("email", email);
         Usr usr = (Usr)query.uniqueResult();
         session.getTransaction().commit();
+        session.close();
         return usr;
     }
 
@@ -67,6 +69,7 @@ public class UserDaoImpl implements UserDao {
         query.setParameter("id", user_id);
         Usr usr = (Usr) query.uniqueResult();
         session.getTransaction().commit();
+        session.close();
         return usr;
     }
 
@@ -81,6 +84,7 @@ public class UserDaoImpl implements UserDao {
         query.setParameter("id", user_id);
         query.executeUpdate();
         session.getTransaction().commit();
+        session.close();
         return getUserById(user_id);
     }
 
@@ -94,6 +98,7 @@ public class UserDaoImpl implements UserDao {
         query.setParameter("id", user_id);
         query.executeUpdate();
         session.getTransaction().commit();
+        session.close();
         return getUserById(user_id);
     }
 
@@ -108,6 +113,7 @@ public class UserDaoImpl implements UserDao {
         query.executeUpdate();
         session.getTransaction().commit();
         session.flush();
+        session.close();
     }
     
 }

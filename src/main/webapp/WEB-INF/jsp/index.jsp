@@ -78,7 +78,7 @@
                 </form>
             </div>
         </div>
-        
+
         <div id="modal2" class="modal">
             <div class="modal-content">
                 <button class="modal-close right" style="background-color: Transparent; border: none;"><i class="material-icons right">close</i></button>
@@ -123,37 +123,36 @@
                 </form>
             </div>
         </div>
-        
+
         <div id="modal3" class="modal">
             <div class="modal-content">
                 <button class="modal-close right" style="background-color: Transparent; border: none;"><i class="material-icons right">close</i></button>
                 <h4>Forgot Password</h4>
-                    <div class="row" id="gParent">
-                        <div id="mParent" class="input-field">
-                            <input id="mail" type="email" maxlength="490" name="mail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
-                                   oninvalid="setCustomValidity('Please follow pattern like abc@pq.xyz(only 2 or 3 letter after .)')"
-                                   onchange="try {
-                                               setCustomValidity('')
-                                           } catch (e) {
-                                           }" required="required" >
-                            <label for="email">Registered Email Id</label>
-                        </div><br>
-                        <button id="forgotSubmit" class="center col s12 btn waves-effect waves-light light-blue darken-1 z-depth-2">Submit</button>
-                    </div>
+                <div class="row" id="gParent">
+                    <div id="mParent" class="input-field">
+                        <input id="mail" type="email" maxlength="490" name="mail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                               oninvalid="setCustomValidity('Please follow pattern like abc@pq.xyz(only 2 or 3 letter after .)')"
+                               onchange="try {
+                                           setCustomValidity('')
+                                       } catch (e) {
+                                       }" required="required" >
+                        <label for="email">Registered Email Id</label>
+                    </div><br>
+                    <button id="forgotSubmit" class="center col s12 btn waves-effect waves-light light-blue darken-1 z-depth-2">Submit</button>
+                </div>
             </div>
         </div>
-    
+
         <br>
         <% List<Painting> paintings = (List<Painting>) request.getAttribute("paintings");
-           List<String> names = (List<String>) request.getAttribute("names"); 
-            int c = 0;
+            List<String> names = (List<String>) request.getAttribute("names");
             if (names != null && paintings != null) {
                 Iterator<String> n = names.iterator();
                 Iterator<Painting> p = paintings.iterator();
-            
+
         %> 
-        
-        
+
+
         <ul id="dropdown2" class="dropdown-content">
             <li style="padding: 10px 0px 0px 30px;" class="orange-text">Price</li>
             <li style="padding: 10px 0px 0px 30px;" class="orange-text">Time</li>
@@ -161,16 +160,16 @@
             <li style="padding: 10px 0px 0px 30px;" class="orange-text">Size</li>
         </ul>
         <br>
-        
-        
+
+
         <div class="row container">
             <div class="col s6">
                 <h5 id="headings" class="right">PAINTINGS</h5>
             </div>
             <div class="col s6" style="padding-top: 8px">
                 <a href="" class="dropdown-button" data-activates="dropdown2" style="font-size: 20px">Sort By    
-                <i class="material-icons" style=" padding-right: 40px;">arrow_drop_down</i>
-            </a>
+                    <i class="material-icons" style=" padding-right: 40px;">arrow_drop_down</i>
+                </a>
             </div>
         </div>
         <div class="container row ">
@@ -178,25 +177,23 @@
                 <div class="card">
 
                     <div class="row" style="padding: 20px" id="cart_parent">
-                        <% while (n.hasNext() && p.hasNext()) {
-                                Painting paint = p.next(); 
+                        <%
+                            while (p.hasNext() && n.hasNext()) {
+                                Painting paint = p.next();
                                 String na = n.next();
-                                c++;
-                                if (c % 4 == 0) {
-                            } else {
                         %>
                         <div class="col s4">
                             <div class="card">
                                 <div class="card-image">
-                                    <img class="materialboxed"  src="<%= paint.getThumbnail_add() %>" style="height: 200px">
-                                    <span class="card-title">Rs/- <%= paint.getPrice() %></span>
+                                    <img class="materialboxed"  src="<%= paint.getThumbnail_add()%>" style="height: 200px">
+                                    <span class="card-title">Rs/- <%= paint.getPrice()%></span>
                                 </div>
-                                                                
+
                                 <div class="card-content">
                                     <p class="left">Title-&nbsp;&nbsp;&nbsp;<%= paint.getName()%></p><br>
                                     <p class="left">Category-&nbsp;&nbsp;&nbsp;<%= paint.getType()%></p><br>
                                     <p class="left">Size-&nbsp;&nbsp;&nbsp;<%= paint.getSze()%> px</p><br>
-                                    <p class="left">By-&nbsp;&nbsp;&nbsp;<a href="artistPaint?uid=<%= paint.getUser_id()%>"><%= na.substring(0, 1).toUpperCase() + na.substring(1) %></a></p>
+                                    <p class="left">By-&nbsp;&nbsp;&nbsp;<a href="artistPaint?uid=<%= paint.getUser_id()%>"><%= na.substring(0, 1).toUpperCase() + na.substring(1)%></a></p>
                                 </div>
                                 <div class="card-action" id="<%= paint.getPainting_id()%>">
                                     <a href="" class="crt"><i class="material-icons">add_shopping_cart</i>Add To Cart</a>
@@ -204,11 +201,10 @@
                             </div>
                         </div>
                         <%
+                                }
                             }
-                        }
-                    }
                         %>
-                </div>
+                    </div>
 
 
 
@@ -216,33 +212,33 @@
             </div>
         </div>
 
-        <footer class="page-footer blue darken-1">
-            <div class="footer-copyright blue darken-1">
-                <div class="container">
-                    © 2014 Copyright Text
-                    <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
-                </div>
+    <footer class="page-footer blue darken-1">
+        <div class="footer-copyright blue darken-1">
+            <div class="container">
+                © 2014 Copyright Text
+                <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
             </div>
-        </footer>
+        </div>
+    </footer>
 
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-        <script type="text/javascript" src="resources/js/myjs.js"></script>
-        <%
-            String popup = (String)request.getAttribute("popup");
-            if (popup != null) {
-        %>
-        <script>
-            Materialize.toast("<%= popup%>", 4000);
-        </script>
-        <%
-            } else if ((String)request.getAttribute("usr") != null) {
-        %>
-        <script>
-            Materialize.toast("<%= (String)request.getAttribute("usr")%>", 4000);
-        </script>
-        <%
-            }
-        %>
-    </body>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script type="text/javascript" src="resources/js/myjs.js"></script>
+    <%
+        String popup = (String) request.getAttribute("popup");
+        if (popup != null) {
+    %>
+    <script>
+                                   Materialize.toast("<%= popup%>", 4000);
+    </script>
+    <%
+    } else if ((String) request.getAttribute("usr") != null) {
+    %>
+    <script>
+        Materialize.toast("<%= (String) request.getAttribute("usr")%>", 4000);
+    </script>
+    <%
+        }
+    %>
+</body>
 </html>

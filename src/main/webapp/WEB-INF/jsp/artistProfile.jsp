@@ -65,7 +65,6 @@
            List<String> names = (List<String>) request.getAttribute("names");
            if (names != null && paintings != null) {
            Iterator<String> n = names.iterator();
-          int c = 0;
         %> 
         
         <ul id="dropdown2" class="dropdown-content">
@@ -92,10 +91,7 @@
 
                     <div class="row" style="padding: 20px" id="cart_parent">
                         <% for (Painting paint : paintings) {
-                                String na = n.next();
-                                c++;
-                                if (c % 4 == 0) {
-                            } else {
+                                String na = n.next();                                
                         %>
                         <div class="col s4">
                             <div class="card" >
@@ -115,7 +111,6 @@
                             </div>
                         </div>
                         <%
-                                }
                             }
                         }
                         %>
