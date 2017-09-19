@@ -101,23 +101,29 @@ public class UserController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ModelAndView save(@ModelAttribute Usr usr, @RequestParam("artist") String[] value, HttpServletRequest request) {
         ModelAndView model;
-        String hashed_pass = BCrypt.hashpw(usr.getPassword(), BCrypt.gensalt());
-        usr.setPassword(hashed_pass);
-        if (value.length == 2) {
-            model = new ModelAndView("artistProfile");
-            usr.setPic("resources/Images/profile.jpg");
-            usr.setType(1);
+        Usr user = userService.findUser(usr.getEmail(), "");
+        if(user != null){
+            model = new ModelAndView("index");
+            model.addObject("popup", "This email id is already registered with us");
         } else {
-            model = new ModelAndView("userProfile");
-            usr.setType(0);
-        }
+            String hashed_pass = BCrypt.hashpw(usr.getPassword(), BCrypt.gensalt());
+            usr.setPassword(hashed_pass);
+            if (value.length == 2) {
+                model = new ModelAndView("artistProfile");
+                usr.setPic("resources/Images/profile.jpg");
+                usr.setType(1);
+            } else {
+                model = new ModelAndView("userProfile");
+                usr.setType(0);
+            }
 
-        userService.addUser(usr);
-        HttpSession session = request.getSession();
-        session.setAttribute("email", usr.getEmail());
-        session.setAttribute("user_id", usr.getUser_id());
-        session.setAttribute("type", usr.getType());
-        model.addObject("msg", "Welcome " + usr.getName().split(" ", 2)[0].substring(0, 1).toUpperCase() + usr.getName().split(" ", 2)[0].substring(1));
+            userService.addUser(usr);
+            HttpSession session = request.getSession();
+            session.setAttribute("email", usr.getEmail());
+            session.setAttribute("user_id", usr.getUser_id());
+            session.setAttribute("type", usr.getType());
+            model.addObject("msg", "Welcome " + usr.getName().split(" ", 2)[0].substring(0, 1).toUpperCase() + usr.getName().split(" ", 2)[0].substring(1));
+        }
         List<Painting> painting = paintingService.getPainting();
         List<String> names = new ArrayList<>();
         for (Painting p : painting) {

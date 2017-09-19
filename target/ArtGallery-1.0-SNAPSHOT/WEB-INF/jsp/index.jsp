@@ -229,11 +229,17 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
         <script type="text/javascript" src="resources/js/myjs.js"></script>
         <%
-            String usr = (String)request.getAttribute("usr");
-            if (usr != null) {
+            String popup = (String)request.getAttribute("popup");
+            if (popup != null) {
         %>
         <script>
-            Materialize.toast("<%= usr%>", 4000);
+            Materialize.toast("<%= popup%>", 4000);
+        </script>
+        <%
+            } else if ((String)request.getAttribute("usr") != null) {
+        %>
+        <script>
+            Materialize.toast("<%= (String)request.getAttribute("usr")%>", 4000);
         </script>
         <%
             }
