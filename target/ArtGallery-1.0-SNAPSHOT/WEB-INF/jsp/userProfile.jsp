@@ -87,6 +87,7 @@
                     <div class="row" style="padding: 20px" id="cart_parent">
                         <% for (Painting paint : paintings) {
                                 c++;
+                                String na = n.next();
                                 if (c % 4 == 0) {
                                     
                             } else {
@@ -101,7 +102,7 @@
                                     <p class="left">Title-&nbsp;&nbsp;&nbsp;<%= paint.getName()%></p><br>
                                     <p class="left">Category-&nbsp;&nbsp;&nbsp;<%= paint.getType()%></p><br>
                                     <p class="left">Size-&nbsp;&nbsp;&nbsp;<%= paint.getSze()%> px</p><br>
-                                    <p class="left">By-&nbsp;&nbsp;&nbsp;<a href="artistPaint?uid=<%= paint.getUser_id()%>"><%= n.next()%></a></p>
+                                    <p class="left">By-&nbsp;&nbsp;&nbsp;<a href="artistPaint?uid=<%= paint.getUser_id()%>"><%= na%></a></p>
                                 </div>
                                 <div class="card-action" id="<%= paint.getPainting_id()%>">
                                     <a href="" class="crt"><i class="material-icons">add_shopping_cart</i> Add To Cart</a>
