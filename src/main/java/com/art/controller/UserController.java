@@ -547,40 +547,46 @@ public class UserController {
 
     @RequestMapping(value = "/downloadPainting", method = RequestMethod.GET)
     public ModelAndView downloadP(HttpServletRequest request, HttpServletResponse response) {
+        
+        HttpSession session = request.getSession(false);
+        if(session == null || session.getAttribute("user_id") == null) {
+            return new ModelAndView("redirect:/");
+        } else {
+            if (request.getParameter("pid") != null && !request.getParameter("pid").equals("")) {
 
-        if (request.getParameter("pid") != null && !request.getParameter("pid").equals("")) {
-            
-            Painting p = paintingService.getPaintingById(Integer.parseInt(request.getParameter("pid")));
-            try {
-                String filePath = "C:/Users/SHWETA/Desktop/" + p.getPainting_add();
-                File file = new File(filePath);
-                FileInputStream fin = new FileInputStream(file);
-                String mimeType = context.getMimeType(filePath);
-                if (mimeType == null) {
-                    mimeType = "application/octet-stream";
+                Painting p = paintingService.getPaintingById(Integer.parseInt(request.getParameter("pid")));
+                try {
+                    String filePath = "C:/Users/SHWETA/Desktop/" + p.getPainting_add();
+                    File file = new File(filePath);
+                    FileInputStream fin = new FileInputStream(file);
+                    String mimeType = context.getMimeType(filePath);
+                    if (mimeType == null) {
+                        mimeType = "application/octet-stream";
+                    }
+                    response.setContentType(mimeType);
+                    response.setContentLength((int) file.length());
+
+                    //forces download
+                    String headerKey = "Content-Disposition";
+                    String headerValue = String.format("attachment; filename=\"%s\"", file.getName());
+                    response.setHeader(headerKey, headerValue);
+
+                    OutputStream outStream = response.getOutputStream();
+                    byte[] buffer = new byte[4096];
+                    int byteRead = -1;
+                    while ((byteRead = fin.read(buffer)) != -1) {
+                        outStream.write(buffer, 0, byteRead);
+                    }
+                    fin.close();
+                    outStream.close();
+                } catch (Exception ex) {
+                    System.out.println("Exception " + ex);
                 }
-                response.setContentType(mimeType);
-                response.setContentLength((int) file.length());
 
-                //forces download
-                String headerKey = "Content-Disposition";
-                String headerValue = String.format("attachment; filename=\"%s\"", file.getName());
-                response.setHeader(headerKey, headerValue);
-
-                OutputStream outStream = response.getOutputStream();
-                byte[] buffer = new byte[4096];
-                int byteRead = -1;
-                while ((byteRead = fin.read(buffer)) != -1) {
-                    outStream.write(buffer, 0, byteRead);
-                }
-                fin.close();
-                outStream.close();
-            } catch (Exception ex) {
-                System.out.println("Exception " + ex);
             }
-            
+            return new ModelAndView("redirect:/myOrder");
         }
-        return new ModelAndView("redirect:/myOrder");
+        
     }
 
     @RequestMapping(value = "/forgotMail", method = RequestMethod.POST)
