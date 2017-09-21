@@ -28,10 +28,6 @@
                 <li style="padding: 10px 0px 0px 70px;" class="orange-text">animation</li>
                 <li style="padding: 10px 0px 0px 70px;" class="orange-text">other</li>
             </ul>
-            <ul id="dropdown3" class="dropdown-content">
-                <li><a href="myOrder">My Orders</a></li>
-                <li><a href="artistPaint?uid=<%= session.getAttribute("user_id")%>">My Profile</a></li>
-            </ul>
 
             <nav>
                 <div class="nav-wrapper blue darken-1">
@@ -47,25 +43,35 @@
                         %>
                         <li id="in"><a class="waves-effect waves-light btn modal-trigger" href="#modal1">Sign In</a></li>
                         <li id="up"><a class="waves-effect waves-light btn modal-trigger" href="#modal2">Sign Up</a></li>
-                        <li id="two" style="display: none;"><a class="dropdown-button" data-activates="dropdown3">My Account<i class="material-icons right">account_box</i></a></li>
+                        <li id="acc" style="display: none;"><a class="dropdown-button" data-activates="dropdown4">My Account<i class="material-icons right">account_box</i></a></li>
+
 
                         <%
                         } else {
-                            if((int)ss.getAttribute("type")==1){
+                            if ((int) ss.getAttribute("type") == 1) {
                         %>
-                                <li><a class="dropdown-button" data-activates="dropdown3">My Account<i class="material-icons right">account_box</i></a></li>
-                            <%
-                                } else {
-                            %>
-                                <li><a href="myOrder"> My Orders</a></li>
-                            <%
-                                }
-                            %>
-                            <li><a href="myCart"><i class="fa fa-shopping-cart right" aria-hidden="true"></i>&nbsp; My Cart</a></li>
-                            <li><a class=" waves-effect waves-light btn" href="logout">LogOut</a></li>  
+                        <li><a class="dropdown-button" data-activates="dropdown3">My Account<i class="material-icons right">account_box</i></a></li>
+                        <%
+                        } else {
+                        %>
+                        <li><a href="myOrder"> My Orders</a></li>
                         <%
                             }
                         %>
+                        <li><a href="myCart"><i class="fa fa-shopping-cart right" aria-hidden="true"></i>&nbsp; My Cart</a></li>
+                        <li><a class=" waves-effect waves-light btn" href="logout">LogOut</a></li>  
+                        
+                        <%
+                            }
+                        %>
+                    </ul>                    
+                    <ul id="dropdown3" class="dropdown-content">
+                        <li><a href="myOrder">My Orders</a></li>
+                        <li><a href="artistPaint?uid=<%= ss.getAttribute("user_id")%>">My Profile</a></li>
+                    </ul>
+                    <ul id="dropdown4" class="dropdown-content">
+                        <li><a href="myOrder">My Orders</a></li>
+                        <li><a id="myprofile">My Profile</a></li>
                     </ul>
                 </div>
             </nav>
@@ -160,7 +166,7 @@
                         <input id="mail" type="email" maxlength="490" name="mail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                                oninvalid="setCustomValidity('Please follow pattern like abc@pq.xyz(only 2 or 3 letter after .)')"
                                onchange="try {
-                                           setCustomValidity('')
+                                           setCustomValidity('');
                                        } catch (e) {
                                        }" required="required" >
                         <label for="email">Registered Email Id</label>
@@ -255,7 +261,7 @@
         if (popup != null) {
     %>
     <script>
-        Materialize.toast("<%= popup%>", 4000);
+                                   Materialize.toast("<%= popup%>", 4000);
     </script>
     <%
     } else if ((String) request.getAttribute("usr") != null) {

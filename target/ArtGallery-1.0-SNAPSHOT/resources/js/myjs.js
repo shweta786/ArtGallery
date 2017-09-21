@@ -165,7 +165,7 @@ $("#signin").on("click", "button.btn", function () {
     
     var em = document.getElementById("email1").value;
     var pass = document.getElementById("password1").value;
-    var order = document.getElementById("two");
+    var order = document.getElementById("acc");
     $.ajax({
         type: "GET",
         url: "signin",
@@ -182,15 +182,16 @@ $("#signin").on("click", "button.btn", function () {
                         $("#in").remove();
                         $("#up").remove();
                         $('#nav-mobile').append('<li id="one"><a href="myCart"><i class="fa fa-shopping-cart right" aria-hidden="true"></i>&nbsp; My Cart</a></li>\n\
-                                                    <li id="two"><a href="myOrder"> My Orders</a></li>\n\
-                                                    <li id="three"><a class="  waves-effect waves-light btn" href="logout">LogOut</a></li>');
-                    } else {
+                                                  <li id="two"><a href="myOrder"> My Orders</a></li>\n\
+                                                 <li id="three"><a class="  waves-effect waves-light btn" href="logout">LogOut</a></li>');
+                    } else {                        
+                        order.style.display = "inline";
                         $("#in").remove();
                         $("#up").remove();
+                        $('#myprofile').attr("href","artistPaint?uid="+data.usr.user_id);
                         $('#nav-mobile').append('<li id="one"><a href="myCart"><i class="fa fa-shopping-cart right" aria-hidden="true"></i>My Cart</a></li>\n\
-                                                <li id="three"><a class="  waves-effect waves-light btn" href="logout">LogOut</a></li>\n\
+                                                <li id="three"><a class="waves-effect waves-light btn" href="logout">LogOut</a></li>\n\
                                                 ');
-                        order.style.display = "inline";
                     }
                     Materialize.toast(data.status, 3000);
             }   
@@ -215,7 +216,7 @@ $("#signup").on("click", "button.btn", function (e) {
     var email = document.getElementById("email2").value;
     var pass = document.getElementById("password2").value;
     var contact = document.getElementById("contact2").value;
-    var order = document.getElementById("two");
+    var order = document.getElementById("acc");
     $.ajax({
         type: "POST", 
         url: "save",
@@ -241,8 +242,9 @@ $("#signup").on("click", "button.btn", function (e) {
                     order.style.display = "inline";
                     $("#in").remove();
                     $("#up").remove();
+                    $('#myprofile').attr("href","artistPaint?uid="+data.usr.user_id);
                     $('#nav-mobile').append('<li><a href="myCart"><i class="fa fa-shopping-cart right" aria-hidden="true"></i>My Cart</a></li>\n\
-                                             <li><a class="  waves-effect waves-light btn" href="logout">LogOut</a></li>\n\
+                                             <li><a class="waves-effect waves-light btn" href="logout">LogOut</a></li>\n\
                                              ');
                 }
                 Materialize.toast(data.status, 5000);
@@ -409,7 +411,7 @@ function showSortPainting(data) {
                 } else{
                    $("#gParent").empty(); 
                    $('#gParent').append('<div class="input-field"><input type="text" maxlength="6" id="code" name="code">\n\
-                                            <label for="code">Enter the 6 digit code</label>\n\
+                                            <label for="code">Enter the 6 digit code sent to your email id</label>\n\
                                         </div>\n\
                                         <input type="hidden" id="fstatus" value="'+data.status+'">\n\
                                         <input type="hidden" id="femail" value="'+mail+'">\n\

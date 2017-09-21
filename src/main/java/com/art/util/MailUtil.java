@@ -21,14 +21,18 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author SHWETA
  */
+@Component
 public class MailUtil {
 
-    public static void sendAttachmentEmail(Session session, String toEmail, String subject, String body, List<String> fileNames) {
+    @Async
+    public void sendAttachmentEmail(Session session, String toEmail, String subject, String body, List<String> fileNames) {
 
         try {
             MimeMessage msg = new MimeMessage(session);

@@ -72,7 +72,7 @@
                             <p><h5>Email-id:<input type="text" value="<%= usr.getEmail()%>" id="email" name="email" style="border-bottom-color: white" readonly disabled>                                                              
                             <p><h5>Contact Number:<input type="text" value="<%= usr.getContact()%>" id="contact" name="contact" style="border-bottom-color: white" pattern="[0-9]{10}" oninvalid="setCustomValidity('Enter valid mobile number of 10 digits')"
                                    onchange="try {
-                                               setCustomValidity('')
+                                               setCustomValidity('');
                                            } catch (e) {
                                            }" disabled>
                         </div>
@@ -110,8 +110,6 @@
                         <% 
                             for (Painting paint : paintings) {
                                 c++;
-                                if (c % 4 == 0) {
-                            } else {
                         %>
                         <div class="col s4" id="<%= paint.getPainting_id()%>">
                             <div class="card">
@@ -139,7 +137,13 @@
                             </div>
                         </div>
                         <%
-                                }
+                            }
+                            if(c == 0) {
+                        %>
+                        <div class="card-content">
+                            <center class="blue-text">Nothing to show yet</center>
+                        </div>
+                        <%
                             }
                         }
                         %>

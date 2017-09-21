@@ -63,6 +63,9 @@ public class UserController {
 
     @Autowired
     ServletContext context;
+    
+    @Autowired
+    MailUtil mailUtil;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView getAllPainting(HttpServletRequest request) {
@@ -452,7 +455,7 @@ public class UserController {
                 paintingService.changePopularity(o.getPainting_id());
                 filenames.add(p.getPainting_add());
             }
-            MailUtil.sendAttachmentEmail(sess, to, "Your Order", "Find the attachement for your paintings that you have ordered. Come back soon.", filenames);
+            mailUtil.sendAttachmentEmail(sess, to, "Your Order", "Find the attachement for your paintings that you have ordered. Come back soon.", filenames);
 
             return new ModelAndView("orderSuccess");
         } else {
@@ -578,7 +581,7 @@ public class UserController {
                         return new PasswordAuthentication(username, password);
                     }
                 });
-                MailUtil.sendAttachmentEmail(sess, mail, "Forgot Password", "Here is your 6 digit confidential code for verification " + n + ". Enter it and create a new password", null);
+                mailUtil.sendAttachmentEmail(sess, mail, "Forgot Password", "Here is your 6 digit confidential code for verification " + n + ". Enter it and create a new password", null);
                 result.setMessage("code sent");
                 result.setStatus(Integer.toString(n));
             }
