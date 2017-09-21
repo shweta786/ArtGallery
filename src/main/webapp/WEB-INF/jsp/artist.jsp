@@ -56,7 +56,7 @@
 
                     <div  class="card-image" style="padding: 20px">
                         <div class="card z-depth-3">  
-                            <img class="materialboxed" id="image" src=" <%= usr.getPic()%> ">
+                            <img id="image" src=" <%= usr.getPic()%> ">
                                 
                                 <form method="post" enctype="multipart/form-data" id="formId">  
                                     <input type="file" style="display: none" id="upl" name="files">

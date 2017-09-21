@@ -6,17 +6,22 @@
 package com.art.config;
 
 //import org.springframework.context.annotation.ComponentScan;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
 //
-///**
-// *
-// * @author SHWETA
-// */
-////@Configuration
-////@EnableWebSecurity
-////@ComponentScan(basePackages = "com.art")
-public class SecurityConfig {
-    
+//@Configuration
+//@EnableWebSecurity
+//@ComponentScan(basePackages = "com.art")
+   public class SecurityConfig  {
+//
+//   @Override
+//   protected void configure(HttpSecurity httpSecurity) throws Exception {
+//   httpSecurity.csrf().disable();}
+
+   
 }

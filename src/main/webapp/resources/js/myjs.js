@@ -157,8 +157,105 @@ $("#cart_parent").on("click", "a.deleteViewRow", function () {
         done: function (e) {
             alert(e);
         }
-
     });
+});
+
+
+$("#signin").on("click", "button.btn", function () {
+    
+    var em = document.getElementById("email1").value;
+    var pass = document.getElementById("password1").value;
+    var order = document.getElementById("two");
+    $.ajax({
+        type: "GET",
+        url: "signin",
+        data: {
+            email: em,
+            password: pass
+        },
+        success: function (data) {
+            if(data.message !== "user" && data.message !== "artist"){
+                Materialize.toast(data.message,4000);
+            } else {
+                    $('#modal1').modal('close');
+                    if (data.message === "user") {
+                        $("#in").remove();
+                        $("#up").remove();
+                        $('#nav-mobile').append('<li id="one"><a href="myCart"><i class="fa fa-shopping-cart right" aria-hidden="true"></i>&nbsp; My Cart</a></li>\n\
+                                                    <li id="two"><a href="myOrder"> My Orders</a></li>\n\
+                                                    <li id="three"><a class="  waves-effect waves-light btn" href="logout">LogOut</a></li>');
+                    } else {
+                        $("#in").remove();
+                        $("#up").remove();
+                        $('#nav-mobile').append('<li id="one"><a href="myCart"><i class="fa fa-shopping-cart right" aria-hidden="true"></i>My Cart</a></li>\n\
+                                                <li id="three"><a class="  waves-effect waves-light btn" href="logout">LogOut</a></li>\n\
+                                                ');
+                        order.style.display = "inline";
+                    }
+                    Materialize.toast(data.status, 3000);
+            }   
+        },
+        error: function (e) {
+            Materialize.toast("Error occured", 3000);
+        },
+        done: function (e) {
+            alert(e);
+        }
+    });
+    
+});
+
+$("#signup").on("click", "button.btn", function (e) {
+    e.preventDefault();
+    var user_type = 0;
+    if ($('input[name =type]:checked').val() === 'on') {
+        user_type = 1;
+    }
+    var name = document.getElementById("name2").value;
+    var email = document.getElementById("email2").value;
+    var pass = document.getElementById("password2").value;
+    var contact = document.getElementById("contact2").value;
+    var order = document.getElementById("two");
+    $.ajax({
+        type: "POST", 
+        url: "save",
+        data: {
+            name: name,
+            email: email,
+            password: pass,
+            contact: contact,
+            type: user_type
+        },
+        success: function (data) {
+            if (data.message !== "user" && data.message !== "artist") {
+                Materialize.toast(data.message, 4000);
+            } else {
+                $('#modal2').modal('close');
+                if (data.message === "user") {
+                    $("#in").remove();
+                    $("#up").remove();
+                    $('#nav-mobile').append('<li><a href="myCart"><i class="fa fa-shopping-cart right" aria-hidden="true"></i>&nbsp; My Cart</a></li>\n\
+                                                    <li><a href="myOrder"> My Orders</a></li>\n\
+                                                    <li><a class="  waves-effect waves-light btn" href="logout">LogOut</a></li>');
+                } else {
+                    order.style.display = "inline";
+                    $("#in").remove();
+                    $("#up").remove();
+                    $('#nav-mobile').append('<li><a href="myCart"><i class="fa fa-shopping-cart right" aria-hidden="true"></i>My Cart</a></li>\n\
+                                             <li><a class="  waves-effect waves-light btn" href="logout">LogOut</a></li>\n\
+                                             ');
+                }
+                Materialize.toast(data.status, 5000);
+            }
+        },
+        error: function (e) {
+            Materialize.toast("Error occured", 3000);
+        },
+        done: function (e) {
+            alert(e);
+        }
+    });
+
 });
 
 

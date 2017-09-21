@@ -146,7 +146,7 @@ public class Painting implements Serializable{
 	   int popular1 = s1.getPopularity();
 	   int popular2 = s2.getPopularity();
 
-	   /*For ascending order*/
+	   /*For descending order*/
 	   return popular2-popular1;
 
    }};

@@ -28,6 +28,10 @@
                 <li style="padding: 10px 0px 0px 70px;" class="orange-text">animation</li>
                 <li style="padding: 10px 0px 0px 70px;" class="orange-text">other</li>
             </ul>
+            <ul id="dropdown3" class="dropdown-content">
+                <li><a href="myOrder">My Orders</a></li>
+                <li><a href="artistPaint?uid=<%= session.getAttribute("user_id")%>">My Profile</a></li>
+            </ul>
 
             <nav>
                 <div class="nav-wrapper blue darken-1">
@@ -37,8 +41,31 @@
                         <li><a href="artist" >Select By Artist</a></li>
                         <li><a class="dropdown-button" data-activates="dropdown1">Select By Category
                                 <i class="material-icons right">arrow_drop_down</i></a></li>
-                        <li><a class="waves-effect waves-light btn modal-trigger" href="#modal1">Sign In</a></li>
-                        <li><a class="waves-effect waves-light btn modal-trigger" href="#modal2">Sign Up</a></li>
+                        <%
+                            HttpSession ss = request.getSession(false);
+                            if (ss == null || ss.getAttribute("user_id") == null) {
+                        %>
+                        <li id="in"><a class="waves-effect waves-light btn modal-trigger" href="#modal1">Sign In</a></li>
+                        <li id="up"><a class="waves-effect waves-light btn modal-trigger" href="#modal2">Sign Up</a></li>
+                        <li id="two" style="display: none;"><a class="dropdown-button" data-activates="dropdown3">My Account<i class="material-icons right">account_box</i></a></li>
+
+                        <%
+                        } else {
+                            if((int)ss.getAttribute("type")==1){
+                        %>
+                                <li><a class="dropdown-button" data-activates="dropdown3">My Account<i class="material-icons right">account_box</i></a></li>
+                            <%
+                                } else {
+                            %>
+                                <li><a href="myOrder"> My Orders</a></li>
+                            <%
+                                }
+                            %>
+                            <li><a href="myCart"><i class="fa fa-shopping-cart right" aria-hidden="true"></i>&nbsp; My Cart</a></li>
+                            <li><a class=" waves-effect waves-light btn" href="logout">LogOut</a></li>  
+                        <%
+                            }
+                        %>
                     </ul>
                 </div>
             </nav>
@@ -50,14 +77,15 @@
             <a class="carousel-item"><img src="resources/Images/Fall Festival Email Header.png"></a>
             <a class="carousel-item"><img src="resources/Images/banner1.jpg"></a>
         </div>
+
         <div id="modal1" class="modal">
             <div class="modal-content">
                 <button class="modal-close right" style="background-color: Transparent; border: none;"><i class="material-icons right">close</i></button>
                 <h4>LogIn to Art Gallery</h4>
-                <form id="signin" method="post" action="signin" class="col s12">
+                <div id="signin" class="col s12">
                     <div class="row">
                         <div class="input-field">
-                            <input id="email" maxlength="490" type="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                            <input id="email1" maxlength="490" type="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                                    oninvalid="setCustomValidity('Please follow pattern like abc@pq.xyz(only 2 or 3 letter after .)')"
                                    onchange="try {
                                                setCustomValidity('');
@@ -66,16 +94,16 @@
                             <label for="email">Registered Email</label>
                         </div>
                         <div class="input-field">
-                            <input id="password" maxlength="190" type="password" name="password" required="required">
+                            <input id="password1" maxlength="190" type="password" name="password" required="required">
                             <label for="password">Password</label>
                         </div>   
                         <a class="modal-trigger" href="" id="forgot"><u>Forgot Password?</u></a>
                         <br><br>
-                        <button class="center col s12 btn waves-effect waves-light light-blue darken-1 z-depth-2" type="submit" name="action">Log In</button>
+                        <button class="btn center col s12 waves-effect waves-light light-blue darken-1 z-depth-2" type="submit" name="action">Log In</button>
                         <br><br><br>
                         <a class="center col s12 modal-trigger" onclick="$('#modal1').modal('close');$('#modal2').modal('open');" href="#modal2"><u>New User? SignUp First</u></a>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
 
@@ -83,44 +111,43 @@
             <div class="modal-content">
                 <button class="modal-close right" style="background-color: Transparent; border: none;"><i class="material-icons right">close</i></button>
                 <h4>Register to Art Gallery</h4>
-                <form id="signup" method="post" action="save" class="col s12">
+                <div id="signup" class="col s12">
                     <div class="row">
                         <div class="input-field">
-                            <input id="name" name="name" type="text" maxlength="190" required="required">
+                            <input id="name2" name="name" type="text" maxlength="190" required="required">
                             <label for="name">Full Name(max. 200 characters)</label>
                         </div>
                         <div class="input-field">
-                            <input id="email" maxlength="490" name="email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required="required"
+                            <input id="email2" maxlength="490" name="email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required="required"
                                    oninvalid="setCustomValidity('Please match format like abc@pq.xyz(only 2 or 3 letter after .)')"
                                    onchange="try {
-                                               setCustomValidity('')
+                                               setCustomValidity('');
                                            } catch (e) {
                                            }">
                             <label for="email">Email</label>
                         </div>
                         <div class="input-field">
-                            <input id="contact" name="contact" type="tel" pattern="[0-9]{10}" oninvalid="setCustomValidity('Enter valid mobile number of 10 digits')"
+                            <input id="contact2" name="contact" type="tel" pattern="[0-9]{10}" oninvalid="setCustomValidity('Enter valid mobile number of 10 digits')"
                                    onchange="try {
-                                               setCustomValidity('')
+                                               setCustomValidity('');
                                            } catch (e) {
                                            }">
                             <label for="contact">Phone (optional)</label>
                         </div>
                         <div class="input-field">
-                            <input id="password" maxlength="490" name="password" type="password" >
+                            <input id="password2" maxlength="490" name="password" type="password" >
                             <label for="password">Password</label>
                         </div><br>
                         <div>
-                            <input type="hidden" name="artist" value="checked">
-                            <input type="checkbox" name="artist" id="artist" />
+                            <input type="checkbox" name="type" id="artist" />
                             <label for="artist">Are you an Artist?</label>
                         </div>                       
                         <div class="center col s12">
-                            <button class="btn waves-effect waves-light light-blue darken-1 z-depth-2" type="submit" name="action" style="margin-left: 30px">SignUp
-                            </button>
-                        </div>
+                            <button class="btn waves-effect waves-light light-blue darken-1 z-depth-2" id="submitForm" type="submit">Sign Up</button>
+                        </div>                        
+
                     </div>
-                </form>
+                </div>
             </div>
         </div>
 
@@ -177,8 +204,7 @@
                 <div class="card">
 
                     <div class="row" style="padding: 20px" id="cart_parent">
-                        <%
-                            while (p.hasNext() && n.hasNext()) {
+                        <%                            while (p.hasNext() && n.hasNext()) {
                                 Painting paint = p.next();
                                 String na = n.next();
                         %>
@@ -229,7 +255,7 @@
         if (popup != null) {
     %>
     <script>
-                                   Materialize.toast("<%= popup%>", 4000);
+        Materialize.toast("<%= popup%>", 4000);
     </script>
     <%
     } else if ((String) request.getAttribute("usr") != null) {

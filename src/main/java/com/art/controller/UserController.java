@@ -48,7 +48,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 public class UserController {
@@ -67,18 +66,7 @@ public class UserController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView getAllPainting(HttpServletRequest request) {
-        ModelAndView model;
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("email") == null) {
-            model = new ModelAndView("index");
-        } else {
-            int type = (int) session.getAttribute("type");
-            if (type == 0) {
-                model = new ModelAndView("userProfile");
-            } else {
-                model = new ModelAndView("artistProfile");
-            }
-        }
+        ModelAndView model = new ModelAndView("index");
         try {
             List<Painting> painting = paintingService.getPainting();
             List<String> names = new ArrayList<>();
@@ -92,28 +80,31 @@ public class UserController {
         return model;
     }
 
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public ModelAndView userLogout(HttpSession session) {
-        session.invalidate();
+    @RequestMapping(value ={"/logout"}, method = RequestMethod.GET)
+    public ModelAndView userLogout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            session.invalidate();
+        }
         return new ModelAndView("redirect:/");
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ModelAndView save(@ModelAttribute Usr usr, @RequestParam("artist") String[] value, HttpServletRequest request) {
-        ModelAndView model;
+    public UserJsonDTO save(Usr usr, String type, HttpServletRequest request) {
+        UserJsonDTO result = new UserJsonDTO();
         Usr user = userService.findUser(usr.getEmail(), "");
         if(user != null){
-            model = new ModelAndView("index");
-            model.addObject("popup", "This email id is already registered with us");
+           result.setMessage("This email id is already registered with us");
+           return result;
         } else {
             String hashed_pass = BCrypt.hashpw(usr.getPassword(), BCrypt.gensalt());
             usr.setPassword(hashed_pass);
-            if (value.length == 2) {
-                model = new ModelAndView("artistProfile");
+            if (type.equals("1")) {
+                result.setMessage("artist");
                 usr.setPic("resources/Images/profile.jpg");
                 usr.setType(1);
             } else {
-                model = new ModelAndView("userProfile");
+                result.setMessage("user");
                 usr.setType(0);
             }
 
@@ -122,32 +113,19 @@ public class UserController {
             session.setAttribute("email", usr.getEmail());
             session.setAttribute("user_id", usr.getUser_id());
             session.setAttribute("type", usr.getType());
-            model.addObject("msg", "Welcome " + usr.getName().split(" ", 2)[0].substring(0, 1).toUpperCase() + usr.getName().split(" ", 2)[0].substring(1));
+            result.setStatus("Welcome " + usr.getName().split(" ", 2)[0].substring(0, 1).toUpperCase() + usr.getName().split(" ", 2)[0].substring(1));
         }
-        List<Painting> painting = paintingService.getPainting();
-        List<String> names = new ArrayList<>();
-        for (Painting p : painting) {
-            names.add(userService.getUserById(p.getUser_id()).getName());
-        }
-        model.addObject("paintings", painting);
-        model.addObject("names", names);
-        return model;
+        return result;
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.GET)
-    public ModelAndView getSave() {
-        return new ModelAndView("accessDenied");
-    }
 
-    @RequestMapping(value = "/signin", method = RequestMethod.POST)
-    public ModelAndView userIn(HttpServletRequest request) {
-        ModelAndView model;
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+    @RequestMapping(value = "/signin", method = RequestMethod.GET)
+    public UserJsonDTO userIn(String email, String password, HttpServletRequest request) {
+
+        UserJsonDTO result = new UserJsonDTO();
         Usr usr = userService.findUser(email, password);
         if (usr == null) {
-            model = new ModelAndView("index");
-            model.addObject("usr", "User doesn't exist");
+            result.setMessage("User doesn't exist");
         } else {
             String pass = usr.getPassword();
             if (BCrypt.checkpw(password, pass)) {
@@ -161,33 +139,21 @@ public class UserController {
                     session.setAttribute("type", usr.getType());
                 }
                 if (usr.getType() == 0) {
-                    model = new ModelAndView("userProfile");
+                    result.setMessage("user");
                 } else {
-                    model = new ModelAndView("artistProfile");
+                    result.setMessage("artist");
                 }
 
-                model.addObject("usr", usr);
-                model.addObject("msg", "Welcome " + usr.getName().split(" ", 2)[0].substring(0, 1).toUpperCase() + usr.getName().split(" ", 2)[0].substring(1));
+                result.setUsr(usr);
+                result.setStatus("Welcome " + usr.getName().split(" ", 2)[0].substring(0, 1).toUpperCase() + usr.getName().split(" ", 2)[0].substring(1));
 
             } else {
-                model = new ModelAndView("index");
-                model.addObject("usr", "Wrong Password");
+                result.setMessage("Wrong Password");
             }
         }
-        List<Painting> painting = paintingService.getPainting();
-        List<String> names = new ArrayList<>();
-        for (Painting p : painting) {
-            names.add(userService.getUserById(p.getUser_id()).getName());
-        }
-        model.addObject("paintings", painting);
-        model.addObject("names", names);
-        return model;
+        return result;
     }
 
-    @RequestMapping(value = "/signin", method = RequestMethod.GET)
-    public ModelAndView userGetIn() {
-        return new ModelAndView("accessDenied");
-    }
 
     @RequestMapping(value = "/artist", method = RequestMethod.GET)
     public ModelAndView getListReader() {
@@ -488,8 +454,7 @@ public class UserController {
             }
             MailUtil.sendAttachmentEmail(sess, to, "Your Order", "Find the attachement for your paintings that you have ordered. Come back soon.", filenames);
 
-            return new ModelAndView("redirect:/myOrder");
-
+            return new ModelAndView("orderSuccess");
         } else {
             return new ModelAndView("redirect:/");
         }
@@ -546,47 +511,41 @@ public class UserController {
     }
 
     @RequestMapping(value = "/downloadPainting", method = RequestMethod.GET)
-    public ModelAndView downloadP(HttpServletRequest request, HttpServletResponse response) {
-        
+    public void downloadP(HttpServletRequest request, HttpServletResponse response) {
+
         HttpSession session = request.getSession(false);
-        if(session == null || session.getAttribute("user_id") == null) {
-            return new ModelAndView("redirect:/");
-        } else {
-            if (request.getParameter("pid") != null && !request.getParameter("pid").equals("")) {
+        if (session != null && session.getAttribute("user_id") != null && request.getParameter("pid") != null && !request.getParameter("pid").equals("")) {
 
-                Painting p = paintingService.getPaintingById(Integer.parseInt(request.getParameter("pid")));
-                try {
-                    String filePath = "C:/Users/SHWETA/Desktop/" + p.getPainting_add();
-                    File file = new File(filePath);
-                    FileInputStream fin = new FileInputStream(file);
-                    String mimeType = context.getMimeType(filePath);
-                    if (mimeType == null) {
-                        mimeType = "application/octet-stream";
-                    }
-                    response.setContentType(mimeType);
-                    response.setContentLength((int) file.length());
-
-                    //forces download
-                    String headerKey = "Content-Disposition";
-                    String headerValue = String.format("attachment; filename=\"%s\"", file.getName());
-                    response.setHeader(headerKey, headerValue);
-
-                    OutputStream outStream = response.getOutputStream();
-                    byte[] buffer = new byte[4096];
-                    int byteRead = -1;
-                    while ((byteRead = fin.read(buffer)) != -1) {
-                        outStream.write(buffer, 0, byteRead);
-                    }
-                    fin.close();
-                    outStream.close();
-                } catch (Exception ex) {
-                    System.out.println("Exception " + ex);
+            Painting p = paintingService.getPaintingById(Integer.parseInt(request.getParameter("pid")));
+            try {
+                String filePath = "C:/Users/SHWETA/Desktop/" + p.getPainting_add();
+                File file = new File(filePath);
+                FileInputStream fin = new FileInputStream(file);
+                String mimeType = context.getMimeType(filePath);
+                if (mimeType == null) {
+                    mimeType = "application/octet-stream";
                 }
+                response.setContentType(mimeType);
+                response.setContentLength((int) file.length());
 
+                //forces download
+                String headerKey = "Content-Disposition";
+                String headerValue = String.format("attachment; filename=\"%s\"", file.getName());
+                response.setHeader(headerKey, headerValue);
+
+                OutputStream outStream = response.getOutputStream();
+                byte[] buffer = new byte[4096];
+                int byteRead = -1;
+                while ((byteRead = fin.read(buffer)) != -1) {
+                    outStream.write(buffer, 0, byteRead);
+                }
+                fin.close();
+                outStream.close();
+            } catch (Exception ex) {
+                System.out.println("Exception " + ex);
             }
-            return new ModelAndView("redirect:/myOrder");
         }
-        
+
     }
 
     @RequestMapping(value = "/forgotMail", method = RequestMethod.POST)
