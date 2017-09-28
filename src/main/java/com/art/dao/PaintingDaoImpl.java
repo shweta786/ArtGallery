@@ -77,10 +77,10 @@ public class PaintingDaoImpl implements PaintingDao{
     public Painting getPaintingById(int painting_id) {
         Session session = getSess();
         session.beginTransaction();
-        String hql = "from Painting painting where (painting_id=:id) and status=:st";
+        String hql = "from Painting painting where (painting_id=:id)";
         Query query = session.createQuery(hql);
         query.setParameter("id", painting_id);
-        query.setParameter("st", 0);
+        //query.setParameter("st", 0);
         session.flush();
         Painting p = (Painting)query.uniqueResult();
         session.close();
@@ -133,6 +133,21 @@ public class PaintingDaoImpl implements PaintingDao{
         session.getTransaction().commit();
         session.flush();
         session.close();
+    }
+
+    @Override
+    public List<Painting> getPaintingByPage(int page) {
+        int pageSize = 6;
+        Session ss =getSess();
+        ss.beginTransaction();
+        Query query = ss.createQuery("from Painting");
+        query = query.setFirstResult(pageSize * (page - 1));
+        query.setMaxResults(pageSize);
+        List<Painting> paintings = query.list();
+        ss.getTransaction().commit();
+        ss.flush();
+        ss.close();
+        return paintings;
     }
     
 }

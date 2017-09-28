@@ -60,5 +60,10 @@ public class PaintingServiceImpl implements PaintingService{
     public void changePopularity(int painting_id) {
         paintingDao.changePopularity(painting_id);
     }
+
+    @Override
+    public List<Painting> getPaintingByPage(int page) {
+        return paintingDao.getPaintingByPage(page);
+    }
     
 }

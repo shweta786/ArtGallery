@@ -22,4 +22,5 @@ public interface PaintingService {
     public void addPainting(Painting painting);
     public void deletePainting(int painting_id);
     public void changePopularity(int painting_id);
+    public List<Painting> getPaintingByPage(int page);
 }

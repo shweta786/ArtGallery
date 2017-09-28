@@ -14,5 +14,6 @@
     <body>
         <h1>Access Denied!</h1>
         You are not allowed to use this URL directly.
+        <%@include file="footer.jsp" %>
     </body>
 </html>

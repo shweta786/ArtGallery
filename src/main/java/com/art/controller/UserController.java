@@ -66,15 +66,23 @@ public class UserController {
     
     @Autowired
     MailUtil mailUtil;
-
+    
+    /**
+     * 
+     * 
+     * @param request
+     * @return index page with all painting and their artist details
+     */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView getAllPainting(HttpServletRequest request) {
         ModelAndView model = new ModelAndView("index");
         try {
             List<Painting> painting = paintingService.getPainting();
+            
+            //
             List<String> names = new ArrayList<>();
             for (Painting p : painting) {
-                names.add(userService.getUserById(p.getUser_id()).getName());
+                names.add(userService.getUserById(p.getUser_id()).getName());       // adding names of artist who uploaded that painting
             }
             model.addObject("paintings", painting);
             model.addObject("names", names);
@@ -83,6 +91,11 @@ public class UserController {
         return model;
     }
 
+    /**
+     * 
+     * @param request
+     * @return view of index page after invalidating current session for user
+     */
     @RequestMapping(value ={"/logout"}, method = RequestMethod.GET)
     public ModelAndView userLogout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -92,15 +105,22 @@ public class UserController {
         return new ModelAndView("redirect:/");
     }
 
+    /**
+     * 
+     * @param usr(Usr object)
+     * @param type(type of user- artist or regular)
+     * @param request
+     * @return Json data holding status, message and Usr object after the user is saved in database
+     */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public UserJsonDTO save(Usr usr, String type, HttpServletRequest request) {
         UserJsonDTO result = new UserJsonDTO();
-        Usr user = userService.findUser(usr.getEmail(), "");
+        Usr user = userService.findUser(usr.getEmail(), "");                    //checking whether the email is already in db or not
         if(user != null){
            result.setMessage("This email id is already registered with us");
            return result;
         } else {
-            String hashed_pass = BCrypt.hashpw(usr.getPassword(), BCrypt.gensalt());
+            String hashed_pass = BCrypt.hashpw(usr.getPassword(), BCrypt.gensalt());      //encrypting password for saving it in db
             usr.setPassword(hashed_pass);
             if (type.equals("1")) {
                 result.setMessage("artist");
@@ -112,21 +132,28 @@ public class UserController {
             }
 
             userService.addUser(usr);
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession();                 //creating session for new user
             session.setAttribute("email", usr.getEmail());
             session.setAttribute("user_id", usr.getUser_id());
             session.setAttribute("type", usr.getType());
-            result.setStatus("Welcome " + usr.getName().split(" ", 2)[0].substring(0, 1).toUpperCase() + usr.getName().split(" ", 2)[0].substring(1));
-        }
+            result.setUsr(usr);
+            result.setStatus("Welcome " + usr.getName().split(" ", 2)[0].substring(0, 1).toUpperCase() + usr.getName().split(" ", 2)[0].substring(1)); // welcome msg for first letter of user name as Capital
+        } 
         return result;
     }
 
-
+    /**
+     * 
+     * @param email
+     * @param password
+     * @param request
+     * @return Json data holding status, message and Usr object after user is signed in
+     */
     @RequestMapping(value = "/signin", method = RequestMethod.GET)
     public UserJsonDTO userIn(String email, String password, HttpServletRequest request) {
 
         UserJsonDTO result = new UserJsonDTO();
-        Usr usr = userService.findUser(email, password);
+        Usr usr = userService.findUser(email, password); //finding user in database
         if (usr == null) {
             result.setMessage("User doesn't exist");
         } else {
@@ -135,7 +162,7 @@ public class UserController {
 
                 HttpSession session = request.getSession(false);
 
-                if (session == null || session.getAttribute("email") == null) {
+                if (session == null || session.getAttribute("email") == null) {  //creating session for user if it doesn't exists
                     session = request.getSession();
                     session.setAttribute("email", usr.getEmail());
                     session.setAttribute("user_id", usr.getUser_id());
@@ -158,14 +185,23 @@ public class UserController {
     }
 
 
+    /**
+     * 
+     * @return showArtist view having list of all the artists
+     */
     @RequestMapping(value = "/artist", method = RequestMethod.GET)
     public ModelAndView getListReader() {
         ModelAndView model = new ModelAndView("showArtist");
-        List<Usr> usr = userService.getUser();
+        List<Usr> usr = userService.getUser();              //getting all the data of user
         model.addObject("users", usr);
         return model;
     }
 
+    /**
+     * 
+     * @param request
+     * @return view of all orders of a user.
+     */
     @RequestMapping(value = "/myOrder", method = RequestMethod.GET)
     public ModelAndView orders(HttpServletRequest request) {
         ModelAndView model;
@@ -174,7 +210,7 @@ public class UserController {
             model = new ModelAndView("redirect:/");
         } else {
             model = new ModelAndView("order");
-            List<Orders> orders = orderService.getOrderByUser((int) session.getAttribute("user_id"), 1);
+            List<Orders> orders = orderService.getOrderByUser((int) session.getAttribute("user_id"), 1);    //fetching paintings which are not removed by its artist
             List<Painting> paintings = new ArrayList<>();
             List<String> names = new ArrayList<>();
             for (Orders o : orders) {
@@ -190,6 +226,11 @@ public class UserController {
         return model;
     }
 
+    /**
+     * 
+     * @param request
+     * @return cart view of a particular user
+     */
     @RequestMapping(value = "/myCart", method = RequestMethod.GET)
     public ModelAndView cart(HttpServletRequest request) {
         ModelAndView model;
@@ -214,6 +255,11 @@ public class UserController {
         return model;
     }
 
+    /**
+     * 
+     * @param request
+     * @return cart view after deleting an item from user cart
+     */
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public ModelAndView remove(HttpServletRequest request) {
         ModelAndView model;
@@ -227,6 +273,11 @@ public class UserController {
         return model;
     }
 
+    /**
+     * 
+     * @param request
+     * @returns profile of an artist
+     */
     @RequestMapping(value = "/artistPaint", method = RequestMethod.GET)
     public ModelAndView artistProfile(HttpServletRequest request) {
 
@@ -249,6 +300,12 @@ public class UserController {
         return model;
     }
 
+    /**
+     * 
+     * @param usr
+     * @param session
+     * @return UserJsonDTO object consisting of status,message and Usr object, after saving description in database
+     */
     @RequestMapping(value = "/saveDes", method = RequestMethod.POST)
     public UserJsonDTO save(@ModelAttribute("usr") Usr usr, HttpSession session) {
         usr.setUser_id((int) session.getAttribute("user_id"));
@@ -260,11 +317,22 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 
+     * @return access denied page
+     */
     @RequestMapping(value = "/saveDes", method = RequestMethod.GET)
     public ModelAndView saveGet() {
         return new ModelAndView("accessDenied");
     }
 
+    /**
+     * 
+     * @param usr
+     * @param files
+     * @param session
+     * @return UserJsonDTO object consisting of status,message and Usr object, after saving artist's profile picture
+     */
     @RequestMapping(value = "/picUpload", method = RequestMethod.POST)
     public UserJsonDTO picSave(@ModelAttribute("usr") Usr usr, @RequestParam("files") MultipartFile files, HttpSession session) {
 
@@ -292,11 +360,11 @@ public class UserController {
         return result;
     }
 
-    @RequestMapping(value = "/picUpload", method = RequestMethod.GET)
-    public ModelAndView picGet() {
-        return new ModelAndView("accessDenied");
-    }
-
+    /**
+     * 
+     * @param request
+     * @return view of form for adding painting by artist
+     */
     @RequestMapping(value = "/addPaint", method = RequestMethod.GET)
     public ModelAndView giveForm(HttpServletRequest request) {
 
@@ -310,6 +378,13 @@ public class UserController {
         return model;
     }
 
+    /**
+     * 
+     * @param painting
+     * @param file
+     * @param session
+     * @return artist profile after saving painting that he/she has uploaded
+     */
     @RequestMapping(value = "/savePainting", method = RequestMethod.POST)
     public ModelAndView saveP(@ModelAttribute Painting painting, @RequestParam("file") CommonsMultipartFile file, HttpSession session) {
         String path = "C:/Users/SHWETA/Desktop/upload/images";
@@ -368,7 +443,7 @@ public class UserController {
             painting.setDt(dt);
             painting.setUser_id((int) session.getAttribute("user_id"));
             paintingService.addPainting(painting);
-            return new ModelAndView("redirect:/artistPaint");
+            return new ModelAndView("redirect:/artistPaint?uid="+session.getAttribute("user_id"));
         } catch (Exception ex) {
             return new ModelAndView("newPaint");
         }
@@ -380,6 +455,12 @@ public class UserController {
         return new ModelAndView("accessDenied");
     }
 
+    /**
+     * 
+     * @param pid
+     * @param request
+     * @return UserJsonDTO object after removing painting
+     */
     @RequestMapping(value = "/delPaint", method = RequestMethod.GET)
     public UserJsonDTO deletePainting(String pid, HttpServletRequest request) {
         UserJsonDTO result = new UserJsonDTO();
@@ -393,6 +474,12 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 
+     * @param paint_id
+     * @param request
+     * @return DTO object after adding item in cart of the user
+     */
     @RequestMapping(value = "/addCart", method = RequestMethod.GET)
     public UserJsonDTO addToCart(String paint_id, HttpServletRequest request) {
         UserJsonDTO result = new UserJsonDTO();
@@ -423,6 +510,11 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 
+     * @param request
+     * @return order success page after confirming order and sending mail of user.
+     */
     @RequestMapping(value = "/orderConfirm", method = RequestMethod.GET)
     public ModelAndView sendMail(HttpServletRequest request) {
 
@@ -464,6 +556,12 @@ public class UserController {
 
     }
 
+    /**
+     * 
+     * @param type
+     * @param request
+     * @return data after selecting painting of some type
+     */
     @RequestMapping(value = "/selectPaint", method = RequestMethod.GET)
     public JsonDTO paintByAjax(String type, HttpServletRequest request) {
 
@@ -484,6 +582,12 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 
+     * @param criteria
+     * @param request
+     * @return data after sorting them in particular order
+     */
     @RequestMapping(value = "/sortPaint", method = RequestMethod.GET)
     public JsonDTO sortPaintByAjax(String criteria, HttpServletRequest request) {
 
@@ -513,6 +617,11 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 
+     * @param request
+     * @param response 
+     */
     @RequestMapping(value = "/downloadPainting", method = RequestMethod.GET)
     public void downloadP(HttpServletRequest request, HttpServletResponse response) {
 
@@ -551,6 +660,12 @@ public class UserController {
 
     }
 
+    /**
+     * 
+     * @param mail
+     * @param request
+     * @return data after sending mail for with OTP for forgot password.
+     */
     @RequestMapping(value = "/forgotMail", method = RequestMethod.POST)
     public UserJsonDTO forgotMailPassword(String mail, HttpServletRequest request) {
 
@@ -589,11 +704,13 @@ public class UserController {
         return result;
     }
 
-    @RequestMapping(value = "/forgotMail", method = RequestMethod.GET)
-    public ModelAndView forgetGet() {
-        return new ModelAndView("accessDenied");
-    }
-
+    /**
+     * 
+     * @param email
+     * @param pass
+     * @param request
+     * @return data after changing password in database
+     */
     @RequestMapping(value = "/setNewPass", method = RequestMethod.POST)
     public UserJsonDTO SetPassword(String email, String pass, HttpServletRequest request) {
 

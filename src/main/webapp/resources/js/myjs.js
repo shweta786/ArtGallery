@@ -7,6 +7,7 @@ $(document).ready(function () {
        return false;
     }); 
     $('.materialboxed').materialbox();
+    $('textarea#des').characterCounter();
 });
 
 
@@ -206,7 +207,8 @@ $("#signin").on("click", "button.btn", function () {
     
 });
 
-$("#signup").on("click", "button.btn", function (e) {
+$( "#signup" ).submit(function( e) {
+    debugger;
     e.preventDefault();
     var user_type = 0;
     if ($('input[name =type]:checked').val() === 'on') {
@@ -462,8 +464,9 @@ function showSortPainting(data) {
                 email: email
             },
             success: function (data) {
-                Materialize.toast(data.status,3000);
                 $('#modal3').modal('close');
+                Materialize.toast(data.status,3000);
+                reset();
             },
             error: function (e) {
                 alert("ERROR: "+e);
@@ -473,4 +476,18 @@ function showSortPainting(data) {
             }
         });
 
+    }
+    
+    function reset() {
+        $("#gParent").empty(); 
+        $('#gParent').append('<div id="mParent" class="input-field">\n\
+                                <input id="mail" type="email" maxlength="490" name="mail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"\n\
+                                oninvalid="setCustomValidity("Please follow pattern like abc@pq.xyz(only 2 or 3 letter after .)")"\n\
+                                            onchange="try { \n\
+                                               setCustomValidity("");\n\
+                                            } catch (e) {}" required="required" >\n\
+                                <label for="email">Registered Email Id</label>\n\
+                             </div><br>\n\
+                             <button id="forgotSubmit" class="center col s12 btn waves-effect waves-light light-blue darken-1 z-depth-2">Submit</button>\n\
+                            ');
     }

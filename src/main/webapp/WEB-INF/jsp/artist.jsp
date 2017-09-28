@@ -67,10 +67,12 @@
                    </div>                    
                     <div class="card-stacked">
                         <div class="card-content">                           
-                            <p><h5>About me:</h5><p id="inv"><font color="#9e9e9e"><%= usr.getDescription()%></font></p>
-                            <textarea class="materialize-textarea" maxlength="999" id="des" name="des" style="display:none;"><%= usr.getDescription()%></textarea><br><br>
-                            <p><h5>Email-id:<input type="text" value="<%= usr.getEmail()%>" id="email" name="email" style="border-bottom-color: white" readonly disabled>                                                              
-                            <p><h5>Contact Number:<input type="text" value="<%= usr.getContact()%>" id="contact" name="contact" style="border-bottom-color: white" pattern="[0-9]{10}" oninvalid="setCustomValidity('Enter valid mobile number of 10 digits')"
+                            <p><h5>About me:</h5><textarea style=" min-height: 140px;" class="materialize-textarea" id="inv" disabled><%= usr.getDescription()%></textarea>                            
+                            <div>
+                                <textarea class="materialize-textarea" data-length="600" maxlength="600" id="des" name="des" style="display:none;"><%= usr.getDescription()%></textarea><br><br>
+                            </div>
+                            <p><h5>Email-id:</h5><input type="text" value="<%= usr.getEmail()%>" id="email" name="email" style="border-bottom-color: white" readonly disabled>                                                              
+                            <p><h5>Contact Number:</h5><input type="text" value="<%= usr.getContact()%>" id="contact" name="contact" style="border-bottom-color: white" pattern="[0-9]{10}" oninvalid="setCustomValidity('Enter valid mobile number of 10 digits')"
                                    onchange="try {
                                                setCustomValidity('');
                                            } catch (e) {
@@ -152,14 +154,8 @@
             </div>
         </div>
 
-        <footer class="page-footer blue darken-1">
-            <div class="footer-copyright blue darken-1">
-                <div class="container">
-                    © 2014 Copyright Text
-                    <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
-                </div>
-            </div>
-        </footer>
+        <%@include file="footer.jsp" %>
+        
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
         <script type="text/javascript" src="resources/js/myjs.js"></script>

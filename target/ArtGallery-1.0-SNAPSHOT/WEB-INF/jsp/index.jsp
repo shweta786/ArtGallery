@@ -117,19 +117,19 @@
             <div class="modal-content">
                 <button class="modal-close right" style="background-color: Transparent; border: none;"><i class="material-icons right">close</i></button>
                 <h4>Register to Art Gallery</h4>
-                <div id="signup" class="col s12">
+                <form id="signup"  class="col s12">
                     <div class="row">
                         <div class="input-field">
                             <input id="name2" name="name" type="text" maxlength="190" required="required">
                             <label for="name">Full Name(max. 200 characters)</label>
                         </div>
                         <div class="input-field">
-                            <input id="email2" maxlength="490" name="email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required="required"
+                            <input id="email2" maxlength="490" name="email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                                    oninvalid="setCustomValidity('Please match format like abc@pq.xyz(only 2 or 3 letter after .)')"
                                    onchange="try {
                                                setCustomValidity('');
                                            } catch (e) {
-                                           }">
+                                           }" required>
                             <label for="email">Email</label>
                         </div>
                         <div class="input-field">
@@ -153,7 +153,7 @@
                         </div>                        
 
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 
@@ -179,6 +179,7 @@
         <br>
         <% List<Painting> paintings = (List<Painting>) request.getAttribute("paintings");
             List<String> names = (List<String>) request.getAttribute("names");
+            int i=0;
             if (names != null && paintings != null) {
                 Iterator<String> n = names.iterator();
                 Iterator<Painting> p = paintings.iterator();
@@ -210,7 +211,7 @@
                 <div class="card">
 
                     <div class="row" style="padding: 20px" id="cart_parent">
-                        <%                            while (p.hasNext() && n.hasNext()) {
+                        <%  while (p.hasNext() && n.hasNext()) {
                                 Painting paint = p.next();
                                 String na = n.next();
                         %>
@@ -244,14 +245,7 @@
             </div>
         </div>
 
-    <footer class="page-footer blue darken-1">
-        <div class="footer-copyright blue darken-1">
-            <div class="container">
-                © 2014 Copyright Text
-                <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
-            </div>
-        </div>
-    </footer>
+    <%@include file="footer.jsp" %>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
