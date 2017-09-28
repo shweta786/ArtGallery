@@ -8,6 +8,7 @@ package com.art.util;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -15,6 +16,7 @@ import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -30,6 +32,28 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MailUtil {
+    
+    public static Session mailSess(){
+        
+        final String username = "galleryart1010";
+        final String password = "mindfire";
+        String host = "smtp.gmail.com";
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", "587");
+        props.put("mail.user", "galleryart1010@gmail.com");
+        props.put("mail.password", password);
+        // Get the Session object.
+        Session sess = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+            public PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+        return sess;     
+    }
 
     @Async
     public void sendAttachmentEmail(Session session, String toEmail, String subject, String body, List<String> fileNames) {

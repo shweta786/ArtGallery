@@ -1,7 +1,6 @@
 com\art\service\OrderService.class
 com\art\model\Painting$2.class
 com\art\service\UserService.class
-com\art\controller\UserController$2.class
 com\art\dao\OrderDaoImpl.class
 com\art\config\WebConfig.class
 com\art\dao\PaintingDao.class
@@ -22,8 +21,9 @@ com\art\config\WebInitializer.class
 com\art\dao\PaintingDaoImpl.class
 com\art\config\SecurityInitializer.class
 com\art\controller\UserController.class
-com\art\controller\UserController$1.class
 com\art\service\UserServiceImpl.class
 com\art\util\HibernateUtil.class
+com\art\controller\ViewController.class
 com\art\dao\OrderDao.class
 com\art\service\PaintingServiceImpl.class
+com\art\util\MailUtil$1.class

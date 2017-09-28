@@ -62,48 +62,8 @@ public class UserController {
     OrderService orderService;
 
     @Autowired
-    ServletContext context;
-    
-    @Autowired
     MailUtil mailUtil;
     
-    /**
-     * 
-     * 
-     * @param request
-     * @return index page with all painting and their artist details
-     */
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView getAllPainting(HttpServletRequest request) {
-        ModelAndView model = new ModelAndView("index");
-        try {
-            List<Painting> painting = paintingService.getPainting();
-            
-            //
-            List<String> names = new ArrayList<>();
-            for (Painting p : painting) {
-                names.add(userService.getUserById(p.getUser_id()).getName());       // adding names of artist who uploaded that painting
-            }
-            model.addObject("paintings", painting);
-            model.addObject("names", names);
-        } catch (Exception e) {
-        }
-        return model;
-    }
-
-    /**
-     * 
-     * @param request
-     * @return view of index page after invalidating current session for user
-     */
-    @RequestMapping(value ={"/logout"}, method = RequestMethod.GET)
-    public ModelAndView userLogout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if(session != null){
-            session.invalidate();
-        }
-        return new ModelAndView("redirect:/");
-    }
 
     /**
      * 
@@ -184,122 +144,6 @@ public class UserController {
         return result;
     }
 
-
-    /**
-     * 
-     * @return showArtist view having list of all the artists
-     */
-    @RequestMapping(value = "/artist", method = RequestMethod.GET)
-    public ModelAndView getListReader() {
-        ModelAndView model = new ModelAndView("showArtist");
-        List<Usr> usr = userService.getUser();              //getting all the data of user
-        model.addObject("users", usr);
-        return model;
-    }
-
-    /**
-     * 
-     * @param request
-     * @return view of all orders of a user.
-     */
-    @RequestMapping(value = "/myOrder", method = RequestMethod.GET)
-    public ModelAndView orders(HttpServletRequest request) {
-        ModelAndView model;
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("email") == null) {
-            model = new ModelAndView("redirect:/");
-        } else {
-            model = new ModelAndView("order");
-            List<Orders> orders = orderService.getOrderByUser((int) session.getAttribute("user_id"), 1);    //fetching paintings which are not removed by its artist
-            List<Painting> paintings = new ArrayList<>();
-            List<String> names = new ArrayList<>();
-            for (Orders o : orders) {
-                paintings.add(paintingService.getPaintingById(o.getPainting_id()));
-            }
-            for (Painting p : paintings) {
-                names.add((userService.getUserById(p.getUser_id())).getName());
-            }
-            model.addObject("names", names);
-            model.addObject("orders", orders);
-            model.addObject("paintings", paintings);
-        }
-        return model;
-    }
-
-    /**
-     * 
-     * @param request
-     * @return cart view of a particular user
-     */
-    @RequestMapping(value = "/myCart", method = RequestMethod.GET)
-    public ModelAndView cart(HttpServletRequest request) {
-        ModelAndView model;
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("email") == null) {
-            model = new ModelAndView("redirect:/");
-        } else {
-            model = new ModelAndView("cart");
-            List<Orders> orders = orderService.getOrderByUser((int) session.getAttribute("user_id"), 0);
-            List<Painting> paintings = new ArrayList<>();
-            for (Orders o : orders) {
-                paintings.add(paintingService.getPaintingById(o.getPainting_id()));
-            }
-            List<String> names = new ArrayList<>();
-            for (Painting p : paintings) {
-                names.add(userService.getUserById(p.getUser_id()).getName());
-            }
-            model.addObject("names", names);
-            model.addObject("orders", orders);
-            model.addObject("paintings", paintings);
-        }
-        return model;
-    }
-
-    /**
-     * 
-     * @param request
-     * @return cart view after deleting an item from user cart
-     */
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public ModelAndView remove(HttpServletRequest request) {
-        ModelAndView model;
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("email") == null) {
-            model = new ModelAndView("redirect:/");
-        } else {
-            orderService.deleteOrder(Integer.parseInt(request.getParameter("id")), 0);
-            return new ModelAndView("redirect:/myCart");
-        }
-        return model;
-    }
-
-    /**
-     * 
-     * @param request
-     * @returns profile of an artist
-     */
-    @RequestMapping(value = "/artistPaint", method = RequestMethod.GET)
-    public ModelAndView artistProfile(HttpServletRequest request) {
-
-        ModelAndView model = new ModelAndView("artist");
-        Usr usr;
-        List<Painting> paintings;
-
-        if (request.getParameter("uid") != null && !request.getParameter("uid").equals("")) {
-            usr = userService.getUserById(Integer.parseInt(request.getParameter("uid")));
-            paintings = paintingService.getPaintingByUser(Integer.parseInt(request.getParameter("uid")));
-            model.addObject("paintings", paintings);
-            model.addObject("usr", usr);
-        } else {
-            return new ModelAndView("redirect:/");
-        }
-
-        if (usr == null || usr.getType() == 0) {
-            return new ModelAndView("redirect:/");
-        }
-        return model;
-    }
-
     /**
      * 
      * @param usr
@@ -315,15 +159,6 @@ public class UserController {
         result.setMessage("Saved Successfully");
         result.setUsr(user);
         return result;
-    }
-
-    /**
-     * 
-     * @return access denied page
-     */
-    @RequestMapping(value = "/saveDes", method = RequestMethod.GET)
-    public ModelAndView saveGet() {
-        return new ModelAndView("accessDenied");
     }
 
     /**
@@ -358,101 +193,6 @@ public class UserController {
             result.setMessage("Error Ocuured, try again");
         }
         return result;
-    }
-
-    /**
-     * 
-     * @param request
-     * @return view of form for adding painting by artist
-     */
-    @RequestMapping(value = "/addPaint", method = RequestMethod.GET)
-    public ModelAndView giveForm(HttpServletRequest request) {
-
-        ModelAndView model;
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("email") == null || (int) session.getAttribute("type") == 0) {
-            model = new ModelAndView("redirect:/");
-        } else {
-            model = new ModelAndView("newPaint");
-        }
-        return model;
-    }
-
-    /**
-     * 
-     * @param painting
-     * @param file
-     * @param session
-     * @return artist profile after saving painting that he/she has uploaded
-     */
-    @RequestMapping(value = "/savePainting", method = RequestMethod.POST)
-    public ModelAndView saveP(@ModelAttribute Painting painting, @RequestParam("file") CommonsMultipartFile file, HttpSession session) {
-        String path = "C:/Users/SHWETA/Desktop/upload/images";
-        String fileName = UUID.randomUUID().toString();
-        String filename = file.getOriginalFilename();
-        try {
-            byte[] bytes = file.getBytes();
-            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(
-                    new File(path + File.separator + fileName + filename)));
-            stream.write(bytes);
-            stream.flush();
-            stream.close();
-
-            File destinationDir = new File("C:/Users/SHWETA/Desktop/upload/thumbnail");
-            Thumbnails.of(path + File.separator + fileName + filename)
-                    .size(200, 200)
-                    .toFiles(destinationDir, Rename.PREFIX_DOT_THUMBNAIL);
-
-            int typ = Integer.parseInt(painting.getType());
-            if (typ == 1) {
-                painting.setType("nature");
-            }
-            if (typ == 2) {
-                painting.setType("spiritual");
-            }
-            if (typ == 3) {
-                painting.setType("vehicle");
-            }
-            if (typ == 4) {
-                painting.setType("animal");
-            }
-            if (typ == 5) {
-                painting.setType("sports");
-            }
-            if (typ == 6) {
-                painting.setType("celebration");
-            }
-            if (typ == 7) {
-                painting.setType("travel and world");
-            }
-            if (typ == 8) {
-                painting.setType("animation");
-            }
-            if (typ == 9) {
-                painting.setType("other");
-            }
-
-            String picToSave = "upload/images/" + fileName + filename;
-            String PicThumbnail = "upload/thumbnail/thumbnail." + fileName + filename;
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = new Date();
-            String dt = dateFormat.format(date);
-
-            painting.setPainting_add(picToSave);
-            painting.setThumbnail_add(PicThumbnail);
-            painting.setDt(dt);
-            painting.setUser_id((int) session.getAttribute("user_id"));
-            paintingService.addPainting(painting);
-            return new ModelAndView("redirect:/artistPaint?uid="+session.getAttribute("user_id"));
-        } catch (Exception ex) {
-            return new ModelAndView("newPaint");
-        }
-
-    }
-
-    @RequestMapping(value = "/savePainting", method = RequestMethod.GET)
-    public ModelAndView paintGet() {
-        return new ModelAndView("accessDenied");
     }
 
     /**
@@ -508,52 +248,6 @@ public class UserController {
             result.setMessage("Added to your cart");
         }
         return result;
-    }
-
-    /**
-     * 
-     * @param request
-     * @return order success page after confirming order and sending mail of user.
-     */
-    @RequestMapping(value = "/orderConfirm", method = RequestMethod.GET)
-    public ModelAndView sendMail(HttpServletRequest request) {
-
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("user_id") != null) {
-            List<Orders> orders = orderService.getOrderByUser((int) session.getAttribute("user_id"), 0);
-            orderService.confirmOrder(orders);
-
-            List<String> filenames = new ArrayList<>();
-            String to = (String) session.getAttribute("email");
-            final String username = "galleryart1010";
-            final String password = "mindfire";
-            String host = "smtp.gmail.com";
-            Properties props = new Properties();
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.starttls.enable", "true");
-            props.put("mail.smtp.host", host);
-            props.put("mail.smtp.port", "587");
-            props.put("mail.user", "galleryart1010@gmail.com");
-            props.put("mail.password", password);
-            // Get the Session object.
-            Session sess = Session.getInstance(props,
-                    new javax.mail.Authenticator() {
-                public PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(username, password);
-                }
-            });
-            for (Orders o : orders) {
-                Painting p = paintingService.getPaintingById(o.getPainting_id());
-                paintingService.changePopularity(o.getPainting_id());
-                filenames.add(p.getPainting_add());
-            }
-            mailUtil.sendAttachmentEmail(sess, to, "Your Order", "Find the attachement for your paintings that you have ordered. Come back soon.", filenames);
-
-            return new ModelAndView("orderSuccess");
-        } else {
-            return new ModelAndView("redirect:/");
-        }
-
     }
 
     /**
@@ -619,49 +313,6 @@ public class UserController {
 
     /**
      * 
-     * @param request
-     * @param response 
-     */
-    @RequestMapping(value = "/downloadPainting", method = RequestMethod.GET)
-    public void downloadP(HttpServletRequest request, HttpServletResponse response) {
-
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("user_id") != null && request.getParameter("pid") != null && !request.getParameter("pid").equals("")) {
-
-            Painting p = paintingService.getPaintingById(Integer.parseInt(request.getParameter("pid")));
-            try {
-                String filePath = "C:/Users/SHWETA/Desktop/" + p.getPainting_add();
-                File file = new File(filePath);
-                FileInputStream fin = new FileInputStream(file);
-                String mimeType = context.getMimeType(filePath);
-                if (mimeType == null) {
-                    mimeType = "application/octet-stream";
-                }
-                response.setContentType(mimeType);
-                response.setContentLength((int) file.length());
-
-                //forces download
-                String headerKey = "Content-Disposition";
-                String headerValue = String.format("attachment; filename=\"%s\"", file.getName());
-                response.setHeader(headerKey, headerValue);
-
-                OutputStream outStream = response.getOutputStream();
-                byte[] buffer = new byte[4096];
-                int byteRead = -1;
-                while ((byteRead = fin.read(buffer)) != -1) {
-                    outStream.write(buffer, 0, byteRead);
-                }
-                fin.close();
-                outStream.close();
-            } catch (Exception ex) {
-                System.out.println("Exception " + ex);
-            }
-        }
-
-    }
-
-    /**
-     * 
      * @param mail
      * @param request
      * @return data after sending mail for with OTP for forgot password.
@@ -679,23 +330,7 @@ public class UserController {
                 result.setMessage("User does not exist");
             } else {
                 int n = (int) (100000 + new Random().nextDouble() * 900000);
-                final String username = "galleryart1010";
-                final String password = "mindfire";
-                String host = "smtp.gmail.com";
-                Properties props = new Properties();
-                props.put("mail.smtp.auth", "true");
-                props.put("mail.smtp.starttls.enable", "true");
-                props.put("mail.smtp.host", host);
-                props.put("mail.smtp.port", "587");
-                props.put("mail.user", "galleryart1010@gmail.com");
-                props.put("mail.password", password);
-                // Get the Session object.
-                Session sess = Session.getInstance(props,
-                        new javax.mail.Authenticator() {
-                    public PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
-                    }
-                });
+                Session sess = MailUtil.mailSess();
                 mailUtil.sendAttachmentEmail(sess, mail, "Forgot Password", "Here is your 6 digit confidential code for verification " + n + ". Enter it and create a new password", null);
                 result.setMessage("code sent");
                 result.setStatus(Integer.toString(n));
