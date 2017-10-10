@@ -65,5 +65,10 @@ public class PaintingServiceImpl implements PaintingService{
     public List<Painting> getPaintingByPage(int page) {
         return paintingDao.getPaintingByPage(page);
     }
+
+    @Override
+    public void refreshAllProducts() {
+        paintingDao.refreshAllProducts();
+    }
     
 }

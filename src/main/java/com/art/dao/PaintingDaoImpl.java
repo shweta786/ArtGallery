@@ -10,6 +10,8 @@ import com.art.util.HibernateUtil;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -25,6 +27,7 @@ public class PaintingDaoImpl implements PaintingDao{
     }
     
     @Override
+    @Cacheable("products")
     public List<Painting> getPainting() {
     
         Session session = getSess();
@@ -37,6 +40,12 @@ public class PaintingDaoImpl implements PaintingDao{
         session.flush();
         session.close();
         return paintings;
+    }
+    
+    @Override
+    @CacheEvict(value = "products", allEntries = true)
+    public void refreshAllProducts() {
+        //This method will remove all 'paintings' from cache, say as a result of flush-all API.
     }
 
     @Override

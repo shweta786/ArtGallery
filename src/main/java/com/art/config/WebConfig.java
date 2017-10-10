@@ -9,6 +9,13 @@ package com.art.config;
  *
  * @author SHWETA
  */
+import net.sf.ehcache.config.CacheConfiguration;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachingConfigurer;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -23,18 +30,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-/**
- *
- * @author SHWETA
- */
+
 @Configuration
 @ComponentScan(basePackages = "com.art")
 @EnableWebMvc
 @EnableAsync
+@EnableCaching
 @PropertySource(value = "resources/artProp.properties")
-public class WebConfig extends WebMvcConfigurerAdapter {
-
-    
+public class WebConfig extends WebMvcConfigurerAdapter implements CachingConfigurer{
+ 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
         return new PropertySourcesPlaceholderConfigurer();
@@ -65,6 +69,29 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
         resolver.setDefaultEncoding("utf-8");
         return resolver;
+    }
+
+    @Bean(destroyMethod="shutdown")
+    public net.sf.ehcache.CacheManager ehCacheManager() {
+        CacheConfiguration cacheConfiguration = new CacheConfiguration();
+        cacheConfiguration.setName("products");
+        cacheConfiguration.setMemoryStoreEvictionPolicy("LRU");
+        cacheConfiguration.setMaxEntriesLocalHeap(1000);
+        net.sf.ehcache.config.Configuration config = new net.sf.ehcache.config.Configuration();
+        config.addCache(cacheConfiguration);
+        return net.sf.ehcache.CacheManager.newInstance(config);
+    }
+
+    @Bean
+    @Override
+    public CacheManager cacheManager() {
+        return new EhCacheCacheManager(ehCacheManager());
+    }
+
+    @Bean
+    @Override
+    public KeyGenerator keyGenerator() {
+        return new SimpleKeyGenerator();
     }
 
 }

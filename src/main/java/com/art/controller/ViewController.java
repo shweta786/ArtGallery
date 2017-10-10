@@ -72,8 +72,6 @@ public class ViewController {
         ModelAndView model = new ModelAndView("index");
         try {
             List<Painting> painting = paintingService.getPainting();
-            
-            //
             List<String> names = new ArrayList<>();
             for (Painting p : painting) {
                 names.add(userService.getUserById(p.getUser_id()).getName());       // adding names of artist who uploaded that painting
@@ -299,6 +297,7 @@ public class ViewController {
             painting.setDt(dt);
             painting.setUser_id((int) session.getAttribute("user_id"));
             paintingService.addPainting(painting);
+            paintingService.refreshAllProducts();
             return new ModelAndView("redirect:/artistPaint?uid="+session.getAttribute("user_id"));
         } catch (Exception ex) {
             return new ModelAndView("newPaint");
