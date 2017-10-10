@@ -23,6 +23,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -32,18 +35,19 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MailUtil {
+                
+    @Autowired
+    private Environment env;
     
-    public static Session mailSess(){
-        
+    public Session mailSess(){
         final String username = "galleryart1010";
         final String password = "mindfire";
-        String host = "smtp.gmail.com";
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", host);
-        props.put("mail.smtp.port", "587");
-        props.put("mail.user", "galleryart1010@gmail.com");
+        props.put("mail.smtp.host", env.getProperty("mailHost"));
+        props.put("mail.smtp.port", env.getProperty("mailPort"));
+        props.put("mail.user", env.getProperty("mailUser"));
         props.put("mail.password", password);
         // Get the Session object.
         Session sess = Session.getInstance(props,
@@ -64,8 +68,8 @@ public class MailUtil {
             msg.addHeader("format", "flowed");
             msg.addHeader("Content-Transfer-Encoding", "8bit");
 
-            msg.setFrom(new InternetAddress("galleryart1010@gmail.com", "NoReply-JD"));
-            msg.setReplyTo(InternetAddress.parse("galleryart1010@gmail.com", false));
+            msg.setFrom(new InternetAddress(env.getProperty("mailUser"), "NoReply-JD"));
+            msg.setReplyTo(InternetAddress.parse(env.getProperty("mailUser"), false));
             msg.setSubject(subject, "UTF-8");
             msg.setSentDate(new Date());
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));

@@ -326,7 +326,7 @@ public class ViewController {
                 paintingService.changePopularity(o.getPainting_id());
                 filenames.add(p.getPainting_add());
             }
-            Session sess = MailUtil.mailSess();
+            Session sess = mailUtil.mailSess();
             mailUtil.sendAttachmentEmail(sess, to, "Your Order", "Find the attachement for your paintings that you have ordered. Come back soon.", filenames);
 
             return new ModelAndView("orderSuccess");

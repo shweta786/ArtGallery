@@ -16,28 +16,20 @@ import com.art.service.UserService;
 import com.art.util.MailUtil;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.name.Rename;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -46,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
@@ -330,7 +321,7 @@ public class UserController {
                 result.setMessage("User does not exist");
             } else {
                 int n = (int) (100000 + new Random().nextDouble() * 900000);
-                Session sess = MailUtil.mailSess();
+                Session sess = mailUtil.mailSess();
                 mailUtil.sendAttachmentEmail(sess, mail, "Forgot Password", "Here is your 6 digit confidential code for verification " + n + ". Enter it and create a new password", null);
                 result.setMessage("code sent");
                 result.setStatus(Integer.toString(n));
