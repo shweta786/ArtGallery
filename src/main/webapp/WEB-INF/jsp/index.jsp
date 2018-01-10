@@ -96,7 +96,7 @@
                                    onchange="try {
                                                setCustomValidity('');
                                            } catch (e) {
-                                           }" required="required" >
+                                           }" required>
                             <label for="email">Registered Email</label>
                         </div>
                         <div class="input-field">
@@ -255,7 +255,7 @@
         if (popup != null) {
     %>
     <script>
-                                   Materialize.toast("<%= popup%>", 4000);
+        Materialize.toast("<%= popup%>", 4000);
     </script>
     <%
     } else if ((String) request.getAttribute("usr") != null) {

@@ -63,7 +63,7 @@ public class UserController {
      * @param request
      * @return Json data holding status, message and Usr object after the user is saved in database
      */
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @RequestMapping(value = {"/save", "/api/save"}, method = RequestMethod.POST)
     public UserJsonDTO save(Usr usr, String type, HttpServletRequest request) {
         UserJsonDTO result = new UserJsonDTO();
         Usr user = userService.findUser(usr.getEmail(), "");                    //checking whether the email is already in db or not
@@ -100,7 +100,7 @@ public class UserController {
      * @param request
      * @return Json data holding status, message and Usr object after user is signed in
      */
-    @RequestMapping(value = "/signin", method = RequestMethod.GET)
+    @RequestMapping(value = {"/signin", "/api/signin"}, method = RequestMethod.GET)
     public UserJsonDTO userIn(String email, String password, HttpServletRequest request) {
 
         UserJsonDTO result = new UserJsonDTO();
@@ -113,7 +113,7 @@ public class UserController {
 
                 HttpSession session = request.getSession(false);
 
-                if (session == null || session.getAttribute("email") == null) {  //creating session for user if it doesn't exists
+                if (session == null || session.getAttribute("email") == null) {  //creating session for user if it exists
                     session = request.getSession();
                     session.setAttribute("email", usr.getEmail());
                     session.setAttribute("user_id", usr.getUser_id());
@@ -265,6 +265,41 @@ public class UserController {
         result.setPaintings(paintings);
         result.setStatus("successfull");
         return result;
+    }
+    
+    //This method is for angular application
+    @RequestMapping("/api/allPainting")
+    public JsonDTO getAllPainting(HttpServletRequest request) {
+        
+            List<Painting> painting = paintingService.getPainting();
+            List<String> names = new ArrayList<>();
+            for (Painting p : painting) {
+                names.add(userService.getUserById(p.getUser_id()).getName());       // adding names of artist who uploaded that painting
+            }
+            JsonDTO result = new JsonDTO();
+            result.setNames(names);
+            result.setPaintings(painting);
+            result.setStatus("successfull");
+        return result;
+    }
+    @RequestMapping(value = "/api/ifSession", method = RequestMethod.GET)
+    public UserJsonDTO ifSession(HttpServletRequest request) {
+       UserJsonDTO result = new UserJsonDTO();
+      HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("email") == null) {
+            result.setStatus("invalid");
+        } else {
+            result.setStatus("valid");
+        }
+        return result;
+    }
+    @RequestMapping(value ={"/api/logout"}, method = RequestMethod.GET)
+    public UserJsonDTO logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            session.invalidate();
+        }
+        return new UserJsonDTO();
     }
 
     /**
