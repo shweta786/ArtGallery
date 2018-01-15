@@ -33,6 +33,7 @@ import javax.servlet.http.HttpSession;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,10 +64,12 @@ public class UserController {
      * @param request
      * @return Json data holding status, message and Usr object after the user is saved in database
      */
-    @RequestMapping(value = {"/save", "/api/save"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/save"}, method = RequestMethod.POST)
     public UserJsonDTO save(Usr usr, String type, HttpServletRequest request) {
+        
         UserJsonDTO result = new UserJsonDTO();
         Usr user = userService.findUser(usr.getEmail(), "");                    //checking whether the email is already in db or not
+        
         if(user != null){
            result.setMessage("This email id is already registered with us");
            return result;
@@ -93,6 +96,68 @@ public class UserController {
         return result;
     }
 
+    //Method for angular UI
+    @RequestMapping(value = { "/api/save"}, method = RequestMethod.POST)
+    public UserJsonDTO saveAngular(@RequestBody Usr usr,HttpServletRequest request) {
+        
+        String type = Integer.toString(usr.getType());
+        UserJsonDTO result = new UserJsonDTO();
+        Usr user = userService.findUser(usr.getEmail(), "");                    //checking whether the email is already in db or not
+        
+        if(user != null){
+           result.setMessage("This email id is already registered with us");
+           return result;
+        } else {
+            String hashed_pass = BCrypt.hashpw(usr.getPassword(), BCrypt.gensalt());      //encrypting password for saving it in db
+            usr.setPassword(hashed_pass);
+            if (type.equals("1")) {
+                result.setMessage("artist");
+                usr.setPic("resources/Images/profile.jpg");
+                usr.setType(1);
+            } else {
+                result.setMessage("user");
+                usr.setType(0);
+            }
+
+            userService.addUser(usr);
+            HttpSession session = request.getSession();                 //creating session for new user
+            session.setAttribute("email", usr.getEmail());
+            session.setAttribute("user_id", usr.getUser_id());
+            session.setAttribute("type", usr.getType());
+            result.setUsr(usr);
+            result.setStatus("Welcome " + usr.getName().split(" ", 2)[0].substring(0, 1).toUpperCase() + usr.getName().split(" ", 2)[0].substring(1)); // welcome msg for first letter of user name as Capital
+        } 
+        return result;
+    }
+    
+    //method for angular UI
+    @RequestMapping(value = "/api/artist", method = RequestMethod.GET)
+    public JsonDTO artistProfile(Integer uid) {
+
+        List<Painting> paintings;
+        JsonDTO result = new JsonDTO();
+        Usr usr = null;
+        if (!(Integer.toString(uid)).equals("")) {
+            usr = userService.getUserById(uid);
+            paintings = paintingService.getPaintingByUser(usr.getUser_id());
+            result.setPaintings(paintings);
+            result.setUsr(usr);
+            result.setMsg("ok");
+        } 
+
+        if (usr == null || usr.getType() == 0) {
+            result.setMsg("no");
+        }
+        return result;
+    }
+    
+    @RequestMapping(value = "/api/allArtist", method = RequestMethod.GET)
+    public JsonDTO getArtistList() {
+        List<Usr> usr = userService.getUser();             //getting all the data of artist
+        JsonDTO result =  new JsonDTO();
+        result.setUsrs(usr);
+        return result;
+    }
     /**
      * 
      * @param email

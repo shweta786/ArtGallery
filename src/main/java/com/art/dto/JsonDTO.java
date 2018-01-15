@@ -6,6 +6,7 @@
 package com.art.dto;
 
 import com.art.model.Painting;
+import com.art.model.Usr;
 import java.util.List;
 
 /**
@@ -17,6 +18,8 @@ public class JsonDTO {
     String status;
     List<Painting> paintings;
     List<String> names;
+    Usr usr;
+    List<Usr> usrs;
     String msg;
 
     public String getStatus() {
@@ -35,6 +38,22 @@ public class JsonDTO {
         this.paintings = paintings;
     }
 
+    public Usr getUsr() {
+        return usr;
+    }
+
+    public void setUsr(Usr usr) {
+        this.usr = usr;
+    }
+    
+    public List<Usr> getUsrs() {
+        return usrs;
+    }
+
+    public void setUsrs(List<Usr> usrs) {
+        this.usrs = usrs;
+    }
+    
     public List<String> getNames() {
         return names;
     }
