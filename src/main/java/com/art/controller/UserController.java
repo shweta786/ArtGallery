@@ -134,12 +134,14 @@ public class UserController {
     @RequestMapping(value = "/api/artist", method = RequestMethod.GET)
     public JsonDTO artistProfile(Integer uid) {
 
-        List<Painting> paintings;
+        List<Painting> paintings = null;
         JsonDTO result = new JsonDTO();
         Usr usr = null;
-        if (!(Integer.toString(uid)).equals("")) {
+        if (!(Integer.toString(uid)).equals("") && uid != null) {
             usr = userService.getUserById(uid);
-            paintings = paintingService.getPaintingByUser(usr.getUser_id());
+            if(usr != null) {           
+                paintings = paintingService.getPaintingByUser(usr.getUser_id());
+            }
             result.setPaintings(paintings);
             result.setUsr(usr);
             result.setMsg("ok");
@@ -157,6 +159,30 @@ public class UserController {
         JsonDTO result =  new JsonDTO();
         result.setUsrs(usr);
         return result;
+    }
+    
+    @RequestMapping(value = "/api/myCart", method = RequestMethod.GET)
+    public ModelAndView cart(HttpServletRequest request) {
+        ModelAndView model;
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("email") == null) {
+            model = new ModelAndView("redirect:/");
+        } else {
+            model = new ModelAndView("cart");
+            List<Orders> orders = orderService.getOrderByUser((int) session.getAttribute("user_id"), 0);
+            List<Painting> paintings = new ArrayList<>();
+            for (Orders o : orders) {
+                paintings.add(paintingService.getPaintingById(o.getPainting_id()));
+            }
+            List<String> names = new ArrayList<>();
+            for (Painting p : paintings) {
+                names.add(userService.getUserById(p.getUser_id()).getName());
+            }
+            model.addObject("names", names);
+            model.addObject("orders", orders);
+            model.addObject("paintings", paintings);
+        }
+        return model;
     }
     /**
      * 
@@ -276,7 +302,7 @@ public class UserController {
      * @param request
      * @return DTO object after adding item in cart of the user
      */
-    @RequestMapping(value = "/addCart", method = RequestMethod.GET)
+    @RequestMapping(value = {"/addCart", "/api/addCart"}, method = RequestMethod.GET)
     public UserJsonDTO addToCart(String paint_id, HttpServletRequest request) {
         UserJsonDTO result = new UserJsonDTO();
         HttpSession session = request.getSession(false);
