@@ -6,7 +6,6 @@
 package com.art.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,7 +22,6 @@ public class Orders implements Serializable{
     @Id
     @GeneratedValue
     private int order_id;
-    
     private int user_id;
     private int painting_id;
     private String order_date;

@@ -162,13 +162,13 @@ public class UserController {
     }
     
     @RequestMapping(value = "/api/myCart", method = RequestMethod.GET)
-    public ModelAndView cart(HttpServletRequest request) {
-        ModelAndView model;
+    public JsonDTO cart(HttpServletRequest request) {
+        JsonDTO result = new JsonDTO();
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("email") == null) {
-            model = new ModelAndView("redirect:/");
+            result.setMsg("no");
         } else {
-            model = new ModelAndView("cart");
+            result.setMsg("yes");
             List<Orders> orders = orderService.getOrderByUser((int) session.getAttribute("user_id"), 0);
             List<Painting> paintings = new ArrayList<>();
             for (Orders o : orders) {
@@ -178,11 +178,24 @@ public class UserController {
             for (Painting p : paintings) {
                 names.add(userService.getUserById(p.getUser_id()).getName());
             }
-            model.addObject("names", names);
-            model.addObject("orders", orders);
-            model.addObject("paintings", paintings);
+            result.setNames(names);
+            result.setOrders(orders);
+            result.setPaintings(paintings);
         }
-        return model;
+        return result;
+    }
+    
+    @RequestMapping(value = "/api/delete", method = RequestMethod.GET)
+    public UserJsonDTO remove(int pid, HttpServletRequest request) {
+        UserJsonDTO result = new UserJsonDTO();
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("email") == null) {
+            result.setMessage("no");
+        } else {
+            result.setMessage("ok");
+            orderService.deleteOrder(pid, 0);
+        }
+        return result;
     }
     /**
      * 
