@@ -437,7 +437,7 @@ public class UserController {
      * @param request
      * @return data after sorting them in particular order
      */
-    @RequestMapping(value = "/sortPaint", method = RequestMethod.GET)
+    @RequestMapping(value = {"/api/sortPaint","/sortPaint"}, method = RequestMethod.GET)
     public JsonDTO sortPaintByAjax(String criteria, HttpServletRequest request) {
 
         List<Painting> paintings = paintingService.getPainting();
