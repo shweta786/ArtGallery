@@ -197,6 +197,31 @@ public class UserController {
         }
         return result;
     }
+    
+    @RequestMapping(value = "/api/orderConfirm", method = RequestMethod.GET)
+    public UserJsonDTO sendMailUsr(HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+        UserJsonDTO result = new UserJsonDTO();
+        if (session != null && session.getAttribute("user_id") != null) {
+            List<Orders> orders = orderService.getOrderByUser((int) session.getAttribute("user_id"), 0);
+            orderService.confirmOrder(orders);
+
+            List<String> filenames = new ArrayList<>();
+            String to = (String) session.getAttribute("email");
+            for (Orders o : orders) {
+                Painting p = paintingService.getPaintingById(o.getPainting_id());
+                paintingService.changePopularity(o.getPainting_id());
+                filenames.add(p.getPainting_add());
+            }
+            Session sess = mailUtil.mailSess();
+            mailUtil.sendAttachmentEmail(sess, to, "Your Order", "Find the attachement for your paintings that you have ordered. Come back soon.", filenames);
+            result.setMessage("ok");
+        } else {
+            result.setMessage("no");
+        }
+        return result;
+    }
     /**
      * 
      * @param email
